@@ -1,0 +1,241 @@
+{UTF-8}
+SwitchInput=
+	0
+	~	
+	~		|
+
+Switch SEIR or SIR=
+	IF THEN ELSE(SwitchInput<0.5, 0, 1)
+	~	Dmnl [1,1,2]
+	~	Modified to take RealParameter input from EMA between 0 and 1. Converts \
+		EMA's RealParameter (between 0 and 1) to CategoricalParameter (0 or 1) for \
+		Vensim.
+	|
+
+Average incubation time=
+	2
+	~	Day
+	~		|
+
+Average infectious period=
+	14
+	~	Day
+	~		|
+
+Basic reproduction number=
+	2
+	~	Dmnl
+	~		|
+
+Case fatality rate=
+	0.01
+	~	Dmnl
+	~		|
+
+Deceased population= INTEG (
+	Dying,
+		Initial deceased population)
+	~	Person
+	~		|
+
+Dying=
+	Case fatality rate * Infectious population / Average infectious period
+	~	Person/Day
+	~		|
+
+Exposed population= INTEG (
+	Infecting-Incubation,
+		Initial exposed population)
+	~	Person
+	~		|
+
+Fraction susceptible population=
+	Susceptible population / Total population
+	~	Dmnl
+	~		|
+
+Incubation=
+	IF THEN ELSE ( Switch SEIR or SIR = 1 , Exposed population / Average incubation time\
+		 , Infecting )
+	~	Person/Day
+	~		|
+
+Infecting=
+	Infectious population * Basic reproduction number * Fraction susceptible population \
+		/ Average infectious period
+	~	Person/Day
+	~		|
+
+Infectious population= INTEG (
+	Incubation-Dying-Surviving,
+		Initial infectious population)
+	~	Person
+	~		|
+
+Initial deceased population=
+	0
+	~	Person
+	~		|
+
+Initial exposed population=
+	0
+	~	Person
+	~		|
+
+Initial infectious population=
+	1
+	~	Person
+	~		|
+
+Initial recovered population=
+	0
+	~	Person
+	~		|
+
+Initial susceptible population=
+	100000
+	~	Person
+	~		|
+
+Recovered population= INTEG (
+	Surviving,
+		Initial recovered population)
+	~	Person
+	~		|
+
+Surviving=
+	( 1 - Case fatality rate ) * Infectious population / Average infectious period
+	~	Person/Day
+	~		|
+
+Susceptible population= INTEG (
+	-Infecting,
+		Initial susceptible population)
+	~	Person
+	~		|
+
+Total population=
+	Susceptible population + Exposed population + Infectious population + Recovered population
+	~	Person
+	~		|
+
+********************************************************
+	.Control
+********************************************************~
+		Simulation Control Parameters
+	|
+
+FINAL TIME  = 360
+	~	Day
+	~	The final time for the simulation.
+	|
+
+INITIAL TIME  = 0
+	~	Day
+	~	The initial time for the simulation.
+	|
+
+SAVEPER  = 
+        TIME STEP
+	~	Day [0,?]
+	~	The frequency with which output is stored.
+	|
+
+TIME STEP  = 0.125
+	~	Day [0,?]
+	~	The time step for the simulation.
+	|
+
+\\\---/// Sketch information - do not modify anything except names
+V300  Do not put anything below this section - it will be ignored
+*View 1
+$192-192-192,0,Arial|12||0-0-0|0-0-0|0-166-214|-1--1--1|-1--1--1|120,120,100,0
+10,1,Susceptible population,136,565,54,25,3,131,0,0,0,0,0,0
+10,2,Exposed population,443,565,50,25,3,131,0,0,0,0,0,0
+10,3,Infectious population,753,565,50,25,3,3,0,0,0,0,0,0
+10,4,Recovered population,1063,565,50,25,3,3,0,0,0,0,0,0
+10,5,Deceased population,753,341,50,25,3,3,0,0,0,0,0,0
+1,6,8,2,4,0,0,22,0,0,0,-1--1--1,,1|(344,565)|
+1,7,8,1,100,0,0,22,0,0,0,-1--1--1,,1|(235,565)|
+11,8,284,288,565,8,10,34,3,0,0,1,0,0,0
+10,9,Infecting,288,589,39,13,40,3,0,0,-1,0,0,0
+1,10,12,3,4,0,0,22,0,0,0,-1--1--1,,1|(654,565)|
+1,11,12,2,100,0,0,22,0,0,0,-1--1--1,,1|(541,565)|
+11,12,380,598,565,8,10,34,3,0,0,1,0,0,0
+10,13,Incubation,598,589,46,13,40,3,0,0,-1,0,0,0
+1,14,16,5,4,0,0,22,0,0,0,-1--1--1,,1|(753,405)|
+1,15,16,3,100,0,0,22,0,0,0,-1--1--1,,1|(753,500)|
+11,16,396,753,453,10,8,33,3,0,0,4,0,0,0
+10,17,Dying,788,453,28,13,40,3,0,0,-1,0,0,0
+1,18,20,4,4,0,0,22,0,0,0,-1--1--1,,1|(964,565)|
+1,19,20,3,100,0,0,22,0,0,0,-1--1--1,,1|(851,565)|
+11,20,300,908,565,8,10,34,3,0,0,1,0,0,0
+10,21,Surviving,908,589,43,13,40,3,0,0,-1,0,0,0
+10,22,Initial susceptible population,133,501,81,24,8,3,0,18,0,0,0,0,0-0-0,0-0-0,|12|I|107-134-137
+10,23,Initial exposed population,443,506,69,24,8,3,0,18,0,0,0,0,0-0-0,0-0-0,|12|I|107-134-137
+10,24,Initial infectious population,753,620,73,24,8,3,0,18,0,0,0,0,0-0-0,0-0-0,|12|I|107-134-137
+10,25,Initial deceased population,753,286,74,24,8,3,0,18,0,0,0,0,0-0-0,0-0-0,|12|I|107-134-137
+10,26,Initial recovered population,1063,508,75,24,8,3,0,18,0,0,0,0,0-0-0,0-0-0,|12|I|107-134-137
+1,27,22,1,0,0,0,0,0,64,1,-1--1--1,,1|(134,525)|
+1,28,23,2,0,0,0,0,0,64,1,-1--1--1,,1|(443,528)|
+1,29,24,3,0,0,0,0,0,64,1,-1--1--1,,1|(753,600)|
+1,30,26,4,0,0,0,0,0,64,1,-1--1--1,,1|(1063,529)|
+1,31,25,5,0,0,0,0,0,64,1,-1--1--1,,1|(753,306)|
+10,32,Total population,616,844,71,13,8,3,0,0,0,0,0,0
+10,33,Switch SEIR or SIR,576,374,58,23,8,3,0,6,0,0,0,0,-1--1--1,165-202-26,|12||255-255-255
+10,34,Fraction susceptible population,253,718,53,34,8,3,0,0,0,0,0,0
+1,35,32,34,1,0,0,0,0,64,0,-1--1--1,,1|(401,828)|
+1,36,1,32,1,0,0,0,0,64,0,-1--1--1,,1|(231,813)|
+1,37,2,32,0,0,0,0,0,64,0,-1--1--1,,1|(528,704)|
+1,38,3,32,0,0,0,0,0,64,0,-1--1--1,,1|(684,704)|
+1,39,4,32,0,0,0,0,0,64,0,-1--1--1,,1|(835,706)|
+1,40,1,34,1,0,0,0,0,64,0,-1--1--1,,1|(189,649)|
+1,41,34,9,1,0,0,0,0,64,0,-1--1--1,,1|(289,639)|
+1,42,3,17,1,0,0,0,0,64,0,-1--1--1,,1|(813,505)|
+1,43,3,21,1,0,0,0,0,64,0,-1--1--1,,1|(850,618)|
+10,44,Case fatality rate,954,389,59,24,8,3,0,18,0,0,0,0,0-0-0,0-0-0,|12|I|109-23-127
+1,45,44,17,0,0,0,0,0,64,0,-1--1--1,,1|(862,423)|
+1,46,44,21,0,0,0,0,0,64,0,-1--1--1,,1|(931,487)|
+10,47,Basic reproduction number,234,381,88,24,8,3,0,18,0,0,0,0,0-0-0,0-0-0,|12|I|109-23-127
+1,48,47,9,1,0,0,0,0,64,0,-1--1--1,,1|(245,476)|
+10,49,Average infectious period,1006,328,78,24,8,3,0,16,0,0,0,0,0-0-0,0-0-0,|12|I|0-0-0
+10,50,Average incubation time,603,688,73,24,8,3,0,16,0,0,0,0,0-0-0,0-0-0,|12|I|0-0-0
+1,51,50,13,0,0,0,0,0,64,0,-1--1--1,,1|(600,639)|
+1,52,2,13,1,0,0,0,0,64,0,-1--1--1,,1|(503,598)|
+1,53,49,17,1,0,0,0,0,64,0,-1--1--1,,1|(844,373)|
+1,54,49,21,1,0,0,0,0,64,0,-1--1--1,,1|(1021,434)|
+1,55,49,9,1,0,0,0,0,64,0,-1--1--1,,1|(601,210)|
+1,56,3,9,1,0,0,0,0,64,0,-1--1--1,,1|(578,434)|
+1,57,33,13,1,0,0,0,0,64,0,-1--1--1,,1|(631,473)|
+1,58,9,13,1,0,0,0,0,64,0,-1--1--1,,1|(413,651)|
+10,59,SwitchInput,458,178,53,13,8,3,0,0,0,0,0,0
+1,60,59,33,0,0,0,0,0,128,0,-1--1--1,,1|(509,265)|
+///---\\\
+:L<%^E!@
+1:SIR.vdf
+9:SIR
+22:$,Dollar,Dollars,$s
+22:Hour,Hours
+22:Month,Months
+22:Person,People,Persons
+22:Unit,Units
+22:Week,Weeks
+22:Year,Years
+22:Day,Days
+15:0,0,0,1,0,0
+19:100,0
+27:2,
+34:0,
+4:Time
+5:Incubation
+35:Date
+36:YYYY-MM-DD
+37:2000
+38:1
+39:1
+40:4
+41:0
+42:0
+24:0
+25:360
+26:360

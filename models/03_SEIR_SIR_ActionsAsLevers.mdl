@@ -1,0 +1,1969 @@
+{UTF-8}
+SWITCH Start Case Isolation=
+	IF THEN ELSE(Lever Case Isolation>0.5, 1 , 0 )
+	~	
+	~		|
+
+SWITCH Start Facemasks=
+	IF THEN ELSE(Lever Facemasks>0.5, 1 , 0 )
+	~	
+	~		|
+
+SWITCH Start Social Distance III=
+	IF THEN ELSE(Lever Social Distance III>0.5, 1 , 0 )
+	~	
+	~		|
+
+SWITCH Start Medical Care I=
+	IF THEN ELSE(Lever Medical Care I>0.5, 1 , 0 )
+	~	
+	~		|
+
+SWITCH Start Medical Care II=
+	IF THEN ELSE(Lever Medical Care II>0.5, 1 , 0 )
+	~	
+	~		|
+
+SWITCH Start Public Edu=
+	IF THEN ELSE(Lever Public Edu>0.5, 1 , 0 )
+	~	
+	~		|
+
+SWITCH Start Public Info=
+	IF THEN ELSE(Lever Public Info>0.5, 1 , 0 )
+	~	
+	~	Formerly: IF THEN ELSE(Time>Activation Time Public Info, 1, 0 )
+	|
+
+SWITCH Start Social Distance I=
+	IF THEN ELSE(Lever Social Distance I>0.5, 1 , 0 )
+	~	
+	~		|
+
+SWITCH Start Social Distance II=
+	IF THEN ELSE(Lever Social Distance II>0.5, 1 , 0 )
+	~	
+	~		|
+
+Lever Social Distance I=
+	1
+	~	
+	~		|
+
+SWITCH Start Tracing=
+	IF THEN ELSE(Lever Tracing>0.5, 1 , 0 )
+	~	
+	~		|
+
+Lever Social Distance III=
+	1
+	~	
+	~		|
+
+Lever Tracing=
+	1
+	~	
+	~		|
+
+SWITCH Vaccination=
+	IF THEN ELSE(Lever Vaccination>0.5, 1 , 0 )
+	~	
+	~		|
+
+SWITCH Voluntary or Involuntary vaccination=
+	IF THEN ELSE(Lever Voluntary or Involuntary Vaccination>0.5, 1 , 0 )
+	~	
+	~	1=Voluntary,0=Involuntary
+	|
+
+Lever Public Info=
+	1
+	~	
+	~		|
+
+Lever Medical Care I=
+	1
+	~	
+	~		|
+
+Lever Case Isolation=
+	1
+	~	
+	~		|
+
+Lever Facemasks=
+	1
+	~	
+	~		|
+
+Lever Voluntary or Involuntary Vaccination=
+	1
+	~	
+	~		|
+
+Lever Medical Care II=
+	1
+	~	
+	~		|
+
+Lever Public Edu=
+	1
+	~	
+	~		|
+
+Lever Social Distance II=
+	1
+	~	
+	~		|
+
+Lever Vaccination=
+	1
+	~	
+	~		|
+
+Immunized Susceptible=
+	Vaccination rate
+	~	
+	~		|
+
+SWITCH Start Voluntary Immunization=
+	1
+	~	
+	~		|
+
+Stock Societal Stress= INTEG (
+	Current Societal Stress Inflow,
+		0)
+	~	
+	~		|
+
+Nominal Vaccination Rate=
+	IF THEN ELSE(SWITCH Voluntary or Involuntary vaccination=1, Voluntary vaccination rate\
+		 , Involuntary vaccination rate )
+	~	
+	~		|
+
+SWITCH Start Involuntary Immunization=
+	1
+	~	
+	~		|
+
+Exposed population= INTEG (
+	Infecting-Incubation,
+		Initial exposed population)
+	~	Person
+	~		|
+
+Current Effort Inflow=
+	Current Total Effort
+	~	
+	~		|
+
+Immune Population= INTEG (
+	Immunized Susceptible,
+		0)
+	~	
+	~		|
+
+Current Societal Stress Inflow=
+	Current Societal Stress
+	~	
+	~		|
+
+Vaccination rate=
+	IF THEN ELSE(SWITCH Vaccination=1, Nominal Vaccination Rate, 0 )
+	~	
+	~		|
+
+Stock Total Effort= INTEG (
+	Current Effort Inflow,
+		0)
+	~	
+	~		|
+
+Voluntary vaccination rate=
+	IF THEN ELSE(Active Controller Voluntary Immunization=1, 100 , 0)
+	~	
+	~		|
+
+Effort Coefficient Active Voluntary Immunization=
+	Base Effort Coefficient Voluntary Immunization*Active Controller Voluntary Immunization
+	~	
+	~		|
+
+Base Effort Coefficient Involuntary Immunization=
+	5
+	~	
+	~		|
+
+Duration Involuntary Immunization=
+	14
+	~	
+	~		|
+
+Effort Coefficient Active Involuntary Immunization=
+	Base Effort Coefficient Involuntary Immunization*Active Controller Involuntary Immunization
+	~	
+	~		|
+
+Base Societal Stress Coefficient Voluntary Immunization=
+	0.1
+	~	
+	~		|
+
+Implementation Time Involuntary Immunization=
+	30
+	~	
+	~		|
+
+SWITCH Implement Voluntary Immunization=
+	DELAY FIXED(SWITCH Start Voluntary Immunization, Implementation Time Voluntary Immunization\
+		 , 0 )
+	~	
+	~		|
+
+Base Effort Coefficient Voluntary Immunization=
+	2
+	~	
+	~		|
+
+SWITCH End Voluntary Immunization=
+	DELAY FIXED(SWITCH Start Voluntary Immunization, Implementation Time Voluntary Immunization\
+		+Duration Voluntary Immunization , 0 )
+	~	
+	~		|
+
+Involuntary vaccination rate=
+	IF THEN ELSE(Active Controller Involuntary Immunization=1, 300 , 0)
+	~	
+	~		|
+
+SWITCH Implement Involuntary Immunization=
+	DELAY FIXED(SWITCH Start Involuntary Immunization, Implementation Time Involuntary Immunization\
+		 , 0 )
+	~	
+	~		|
+
+Active Controller Involuntary Immunization=
+	SWITCH Implement Involuntary Immunization-SWITCH End Involuntary Immunization
+	~	
+	~		|
+
+Societal Stress Coefficient Active Involuntary Immunization=
+	Active Controller Involuntary Immunization*Base Societal Stress Coefficient Involuntary Immunization
+	~	
+	~		|
+
+Implementation Time Voluntary Immunization=
+	30
+	~	
+	~		|
+
+Societal Stress Coefficient Active Voluntary Immunization=
+	Active Controller Voluntary Immunization*Base Societal Stress Coefficient Voluntary Immunization
+	~	
+	~		|
+
+Duration Voluntary Immunization=
+	14
+	~	
+	~		|
+
+Current Total Effort=
+	Effort Coefficient Active Facemasks+Effort Coefficient Active Medical Care I+Effort Coefficient Active Medical Care II\
+		+
+	Effort Coefficient Active Public Edu+Effort Coefficient Active Public Info+Effort Coefficient Active Social Distance I\
+		+
+	Effort Coefficient Active Social Distance II
+	+Effort Coefficient Active Social Distance III+Effort Coefficient Active Tracing+Effort Coefficient Active Case Isolation
+	+Effort Coefficient Active Involuntary Immunization+Effort Coefficient Active Voluntary Immunization
+	~	
+	~		|
+
+Base Societal Stress Coefficient Involuntary Immunization=
+	0.5
+	~	
+	~		|
+
+Active Controller Voluntary Immunization=
+	SWITCH Implement Voluntary Immunization-SWITCH End Voluntary Immunization
+	~	
+	~		|
+
+SWITCH End Involuntary Immunization=
+	DELAY FIXED(SWITCH Start Involuntary Immunization, Implementation Time Involuntary Immunization\
+		+Duration Involuntary Immunization , 0 )
+	~	
+	~		|
+
+Current Societal Stress=
+	1-(
+	(1-Societal Stress Coefficient Active Facemasks)*
+	(1-Societal Stress Coefficient Active Case Isolation)*
+	(1-Societal Stress Coefficient Active Medical Care I)*
+	(1-Societal Stress Coefficient Active Medical Care II)*
+	(1-Societal Stress Coefficient Active Public Edu)*
+	(1-Societal Stress Coefficient Active Public Info)*
+	(1-Societal Stress Coefficient Active Social Distance I)*
+	(1-Societal Stress Coefficient Active Social Distance II)*
+	(1-Societal Stress Coefficient Active Social Distance III)*
+	(1-Societal Stress Coefficient Active Tracing)*
+	(1-Societal Stress Coefficient Active Involuntary Immunization)*
+	(1-Societal Stress Coefficient Active Voluntary Immunization)
+	)
+	~	
+	~		|
+
+Activation Time=
+	42
+	~	
+	~		|
+
+Activation TimeOld=
+	0
+	~	
+	~		|
+
+Active Controller=
+	SWITCH Implement-SWITCH End
+	~	
+	~		|
+
+Active Controller Case Isolation=
+	SWITCH Implement Case Isolation-SWITCH End Case Isolation
+	~	
+	~		|
+
+Active Controller Facemasks=
+	SWITCH Implement Facemasks-SWITCH End Facemasks
+	~	
+	~		|
+
+Active Controller Medical Care I=
+	SWITCH Implement Medical Care I-SWITCH End Medical Care I
+	~	
+	~		|
+
+Active Controller Medical Care II=
+	SWITCH Implement Medical Care II-SWITCH End Medical Care II
+	~	
+	~		|
+
+Active Controller Public Edu=
+	SWITCH Implement Public Edu-SWITCH End Public Edu
+	~	
+	~		|
+
+Active Controller Public Info=
+	SWITCH Implement Public Info-SWITCH End Public Info
+	~	
+	~		|
+
+Active Controller Social Distance I=
+	SWITCH Implement Social Distance I-SWITCH End Social Distance I
+	~	
+	~		|
+
+Active Controller Social Distance II=
+	SWITCH Implement Social Distance II-SWITCH End Social Distance II
+	~	
+	~		|
+
+Active Controller Social Distance III=
+	SWITCH Implement Social Distance III-SWITCH End Social Distance III
+	~	
+	~		|
+
+Active Controller Tracing=
+	SWITCH Implement Tracing-SWITCH End Tracing
+	~	
+	~		|
+
+Base Societal Stress Coefficient=
+	42
+	~	
+	~		|
+
+CoefficientOld=
+	IF THEN ELSE(SWITCHOld =1,Base Transmission CoefficientOld,1)
+	~	
+	~		|
+
+Base Effort Coefficient=
+	42
+	~	
+	~		|
+
+Base Effort Coefficient Case Isolation=
+	5
+	~	
+	~		|
+
+Base Effort Coefficient Facemasks=
+	2
+	~	
+	~		|
+
+Base Effort Coefficient Medical Care I=
+	1
+	~	
+	~		|
+
+Base Effort Coefficient Medical Care II=
+	4
+	~	
+	~		|
+
+Base Effort Coefficient Public Edu=
+	1
+	~	
+	~		|
+
+Base Effort Coefficient Public Info=
+	1
+	~	
+	~		|
+
+Base Effort Coefficient Social Distance I=
+	2
+	~	
+	~		|
+
+Base Effort Coefficient Social Distance II=
+	3
+	~	
+	~		|
+
+Base Effort Coefficient Social Distance III=
+	4
+	~	
+	~		|
+
+Base Effort Coefficient Tracing=
+	3
+	~	
+	~		|
+
+Base Effort CoefficientOld=
+	42
+	~	
+	~		|
+
+Base Recovery Coefficient=
+	42
+	~	
+	~		|
+
+Base Recovery Coefficient Case Isolation=
+	0.92
+	~	
+	~		|
+
+Base Recovery Coefficient Facemasks=
+	1
+	~	
+	~		|
+
+Base Recovery Coefficient Medical Care I=
+	0.97
+	~	
+	~		|
+
+Base Recovery Coefficient Medical Care II=
+	0.7
+	~	
+	~		|
+
+Base Recovery Coefficient Public Edu=
+	1
+	~	
+	~		|
+
+Base Recovery Coefficient Public Info=
+	1
+	~	
+	~		|
+
+Base Recovery Coefficient Social Distance I=
+	1
+	~	
+	~		|
+
+Base Recovery Coefficient Social Distance II=
+	1
+	~	
+	~		|
+
+Base Recovery Coefficient Social Distance III=
+	1
+	~	
+	~		|
+
+Base Recovery Coefficient Tracing=
+	1
+	~	
+	~		|
+
+Base Recovery CoefficientOld=
+	42
+	~	
+	~		|
+
+Effort Coefficient Active Public Edu=
+	Base Effort Coefficient Public Edu*Active Controller Public Edu
+	~	
+	~		|
+
+Base Societal Stress Coefficient Case Isolation=
+	0.3
+	~	
+	~		|
+
+Base Societal Stress Coefficient Facemasks=
+	0.1
+	~	
+	~		|
+
+Base Societal Stress Coefficient Medical Care I=
+	0.05
+	~	
+	~		|
+
+Base Societal Stress Coefficient Medical Care II=
+	0.05
+	~	
+	~		|
+
+Base Societal Stress Coefficient Public Edu=
+	0.01
+	~	
+	~		|
+
+Base Societal Stress Coefficient Public Info=
+	0.01
+	~	
+	~		|
+
+Base Societal Stress Coefficient Social Distance I=
+	0.2
+	~	
+	~		|
+
+Base Societal Stress Coefficient Social Distance II=
+	0.3
+	~	
+	~		|
+
+Base Societal Stress Coefficient Social Distance III=
+	0.5
+	~	
+	~		|
+
+Base Societal Stress Coefficient Tracing=
+	0.1
+	~	
+	~		|
+
+Base Societal Stress CoefficientOld=
+	42
+	~	
+	~		|
+
+Base Transmission Coefficient=
+	42
+	~	
+	~		|
+
+Base Transmission Coefficient Case Isolation=
+	0.73
+	~	
+	~		|
+
+Base Transmission Coefficient Facemasks=
+	0.93
+	~	
+	~		|
+
+Base Transmission Coefficient Medical Care I=
+	0.9
+	~	
+	~		|
+
+Base Transmission Coefficient Medical Care II=
+	0.83
+	~	
+	~		|
+
+Base Transmission Coefficient Public Edu=
+	0.97
+	~	
+	~		|
+
+Base Transmission Coefficient Public Info=
+	0.97
+	~	
+	~		|
+
+Base Transmission Coefficient Social Distance I=
+	0.92
+	~	
+	~		|
+
+Base Transmission Coefficient Social Distance II=
+	0.89
+	~	
+	~		|
+
+Base Transmission Coefficient Social Distance III=
+	0.7
+	~	
+	~		|
+
+Base Transmission Coefficient Tracing=
+	0.87
+	~	
+	~		|
+
+Base Transmission CoefficientOld=
+	42
+	~	
+	~		|
+
+SWITCH Implement Social Distance III=
+	DELAY FIXED(SWITCH Start Social Distance III, Implementation Time Social Distance III\
+		 , 0 )
+	~	
+	~		|
+
+SWITCH Implement Tracing=
+	DELAY FIXED(SWITCH Start Tracing, Implementation Time Tracing , 0 )
+	~	
+	~		|
+
+Societal Stress Coefficient Active Social Distance II=
+	Active Controller Social Distance II*Base Societal Stress Coefficient Social Distance II
+	~	
+	~		|
+
+Effort Coefficient Active Public Info=
+	Base Effort Coefficient Public Info*Active Controller Public Info
+	~	
+	~		|
+
+contact rate coefficient=
+	
+	Transmission Coefficient Active Case Isolation*Transmission Coefficient Active Facemasks\
+		*Transmission Coefficient Active Medical Care I
+	*Transmission Coefficient Active Medical Care II*Transmission Coefficient Active Public Edu\
+		*Transmission Coefficient Active Public Info
+	*Transmission Coefficient Active Social Distance I*Transmission Coefficient Active Social Distance II\
+		*Transmission Coefficient Active Social Distance III
+	*Transmission Coefficient Active Tracing
+	~	
+	~		|
+
+Controlled CoefficientOld=
+	IF THEN ELSE(SWITCH TimeoutOld=1, 1, Delayed CoefficientOld)
+	~	
+	~		|
+
+Delayed CoefficientOld=
+	
+	
+	DELAY FIXED(CoefficientOld, Implementation TimeOld,1 )
+	~	
+	~		|
+
+Duration=
+	42
+	~	
+	~		|
+
+Duration Case Isolation=
+	14
+	~	
+	~		|
+
+Duration Facemasks=
+	7
+	~	
+	~		|
+
+Duration Medical Care I=
+	20
+	~	
+	~		|
+
+Duration Medical Care II=
+	14
+	~	
+	~		|
+
+Duration Public Edu=
+	7
+	~	
+	~		|
+
+Duration Public Info=
+	7
+	~	
+	~		|
+
+Duration Social Distance I=
+	7
+	~	
+	~		|
+
+Duration Social Distance II=
+	5
+	~	
+	~		|
+
+Duration Social Distance III=
+	5
+	~	
+	~		|
+
+Duration Tracing=
+	7
+	~	
+	~		|
+
+DurationOld=
+	42
+	~	
+	~		|
+
+Transmission Coefficient Active Public Edu=
+	
+	IF THEN ELSE(Active Controller Public Edu=1, Base Transmission Coefficient Public Edu\
+		 , 1 )
+	~	
+	~	Base Transmission Coefficient Public Edu*Active Controller Public Edu
+	|
+
+Effort Coefficient Active=
+	Base Effort Coefficient*Active Controller
+	~	
+	~		|
+
+Effort Coefficient Active Case Isolation=
+	Base Effort Coefficient Case Isolation*Active Controller Case Isolation
+	~	
+	~		|
+
+Effort Coefficient Active Facemasks=
+	Base Effort Coefficient Facemasks*Active Controller Facemasks
+	~	
+	~		|
+
+Effort Coefficient Active Medical Care I=
+	Base Effort Coefficient Medical Care I*Active Controller Medical Care I
+	~	
+	~		|
+
+Effort Coefficient Active Medical Care II=
+	Base Effort Coefficient Medical Care II*Active Controller Medical Care II
+	~	
+	~		|
+
+Transmission Coefficient Active Tracing=
+	IF THEN ELSE( Active Controller Tracing=1,Base Transmission Coefficient Tracing ,1)
+	~	
+	~		|
+
+Societal Stress Coefficient Active Social Distance III=
+	Active Controller Social Distance III*Base Societal Stress Coefficient Social Distance III
+	~	
+	~		|
+
+Effort Coefficient Active Social Distance I=
+	Base Effort Coefficient Social Distance I*Active Controller Social Distance I
+	~	
+	~		|
+
+Effort Coefficient Active Social Distance II=
+	Base Effort Coefficient Social Distance II*Active Controller Social Distance II
+	~	
+	~		|
+
+Effort Coefficient Active Social Distance III=
+	Base Effort Coefficient Social Distance III*Active Controller Social Distance III
+	~	
+	~		|
+
+Effort Coefficient Active Tracing=
+	Base Effort Coefficient Tracing*Active Controller Tracing
+	~	
+	~		|
+
+SWITCH End Facemasks=
+	DELAY FIXED(SWITCH Start Facemasks, Implementation Time Facemasks+Duration Facemasks\
+		 , 0 )
+	~	
+	~		|
+
+Implementation Time=
+	42
+	~	
+	~		|
+
+Implementation Time Case Isolation=
+	14
+	~	
+	~		|
+
+Implementation Time Facemasks=
+	5
+	~	
+	~		|
+
+Implementation Time Medical Care I=
+	5
+	~	
+	~		|
+
+Implementation Time Medical Care II=
+	20
+	~	
+	~		|
+
+Implementation Time Public Edu=
+	2
+	~	
+	~		|
+
+Implementation Time Public Info=
+	2
+	~	
+	~		|
+
+Implementation Time Social Distance I=
+	1
+	~	
+	~		|
+
+Implementation Time Social Distance II=
+	1
+	~	
+	~		|
+
+Implementation Time Social Distance III=
+	2
+	~	
+	~		|
+
+Implementation Time Tracing=
+	2
+	~	
+	~		|
+
+Implementation TimeOld=
+	42
+	~	
+	~		|
+
+SWITCH Implement Social Distance I=
+	DELAY FIXED(SWITCH Start Social Distance I, Implementation Time Social Distance I , \
+		0 )
+	~	
+	~		|
+
+SWITCH Implement Social Distance II=
+	DELAY FIXED(SWITCH Start Social Distance II, Implementation Time Social Distance II \
+		, 0 )
+	~	
+	~		|
+
+Societal Stress Coefficient Active Social Distance I=
+	Active Controller Social Distance I*Base Societal Stress Coefficient Social Distance I
+	~	
+	~		|
+
+Recovery Coefficient Active Public Info=
+	IF THEN ELSE(Active Controller Public Info =1, Base Recovery Coefficient Public Info\
+		,1)
+	~	
+	~		|
+
+Recovery Coefficient Active Social Distance I=
+	IF THEN ELSE( Active Controller Social Distance I=1,Base Recovery Coefficient Social Distance I\
+		 ,1)
+	~	
+	~		|
+
+SWITCH Start=
+	IF THEN ELSE(Time>Activation Time, 1, 0 )
+	~	
+	~		|
+
+recovery coefficient=
+	Recovery Coefficient Active Case Isolation*Recovery Coefficient Active Facemasks*Recovery Coefficient Active Medical Care I
+	*Recovery Coefficient Active Medical Care II*Recovery Coefficient Active Public Edu*\
+		Recovery Coefficient Active Public Info
+	*Recovery Coefficient Active Social Distance I*Recovery Coefficient Active Social Distance II\
+		*Recovery Coefficient Active Social Distance III
+	*Recovery Coefficient Active Tracing
+	~	
+	~		|
+
+Recovery Coefficient Active=
+	Base Recovery Coefficient*Active Controller
+	~	
+	~		|
+
+Recovery Coefficient Active Case Isolation=
+	IF THEN ELSE( Active Controller Case Isolation=1,Base Recovery Coefficient Case Isolation\
+		 ,1)
+	~	
+	~		|
+
+Recovery Coefficient Active Facemasks=
+	IF THEN ELSE( Active Controller Facemasks=1, Base Recovery Coefficient Facemasks,1)
+	~	
+	~		|
+
+Recovery Coefficient Active Medical Care I=
+	IF THEN ELSE( Active Controller Medical Care I=1,Base Recovery Coefficient Medical Care I\
+		 ,1)
+	~	
+	~		|
+
+Recovery Coefficient Active Medical Care II=
+	IF THEN ELSE(Active Controller Medical Care II =1, Base Recovery Coefficient Medical Care II\
+		,1)
+	~	
+	~		|
+
+Recovery Coefficient Active Public Edu=
+	IF THEN ELSE( Active Controller Public Edu=1, Base Recovery Coefficient Public Edu,1\
+		)
+	~	
+	~		|
+
+SWITCH End Social Distance II=
+	DELAY FIXED(SWITCH Start Social Distance II, Implementation Time Social Distance II+\
+		Duration Social Distance II , 0 )
+	~	
+	~		|
+
+SWITCH End Social Distance III=
+	DELAY FIXED(SWITCH Start Social Distance III, Implementation Time Social Distance III\
+		+Duration Social Distance III , 0 )
+	~	
+	~		|
+
+Recovery Coefficient Active Social Distance II=
+	IF THEN ELSE( Active Controller Social Distance II=1, Base Recovery Coefficient Social Distance II\
+		,1)
+	~	
+	~		|
+
+Recovery Coefficient Active Social Distance III=
+	IF THEN ELSE( Active Controller Social Distance III=1, Base Recovery Coefficient Social Distance III\
+		,1)
+	~	
+	~		|
+
+Recovery Coefficient Active Tracing=
+	IF THEN ELSE(Active Controller Tracing =1, Base Recovery Coefficient Tracing,1)
+	~	
+	~		|
+
+Societal Stress Coefficient Active=
+	Active Controller*Base Societal Stress Coefficient
+	~	
+	~		|
+
+Societal Stress Coefficient Active Case Isolation=
+	Active Controller Case Isolation*Base Societal Stress Coefficient Case Isolation
+	~	
+	~		|
+
+Societal Stress Coefficient Active Facemasks=
+	Active Controller Facemasks*Base Societal Stress Coefficient Facemasks
+	~	
+	~		|
+
+Societal Stress Coefficient Active Medical Care I=
+	Active Controller Medical Care I*Base Societal Stress Coefficient Medical Care I
+	~	
+	~		|
+
+Societal Stress Coefficient Active Medical Care II=
+	Active Controller Medical Care II*Base Societal Stress Coefficient Medical Care II
+	~	
+	~		|
+
+Societal Stress Coefficient Active Public Edu=
+	Active Controller Public Edu*Base Societal Stress Coefficient Public Edu
+	~	
+	~		|
+
+Societal Stress Coefficient Active Public Info=
+	Active Controller Public Info*Base Societal Stress Coefficient Public Info
+	~	
+	~		|
+
+Transmission Coefficient Active Social Distance III=
+	IF THEN ELSE( Active Controller Social Distance III=1,Base Transmission Coefficient Social Distance III\
+		 ,1)
+	~	
+	~		|
+
+SWITCH TimeoutOld=
+	DELAY FIXED( SWITCHOld , DurationOld + Implementation TimeOld,0 )
+	~	
+	~		|
+
+SWITCHOld=
+	IF THEN ELSE(Time>Activation TimeOld, 1, 0 )
+	~	
+	~		|
+
+Societal Stress Coefficient Active Tracing=
+	Active Controller Tracing*Base Societal Stress Coefficient Tracing
+	~	
+	~		|
+
+Susceptible population= INTEG (
+	-Immunized Susceptible-Infecting,
+		Initial susceptible population)
+	~	Person
+	~		|
+
+SWITCH End=
+	DELAY FIXED(SWITCH Start, Implementation Time+Duration , 0 )
+	~	
+	~		|
+
+SWITCH End Case Isolation=
+	DELAY FIXED(SWITCH Start Case Isolation, Implementation Time Case Isolation+Duration Case Isolation\
+		 , 0 )
+	~	
+	~		|
+
+SWITCH Implement Medical Care II=
+	DELAY FIXED(SWITCH Start Medical Care II, Implementation Time Medical Care II , 0 )
+	~	
+	~		|
+
+SWITCH End Medical Care I=
+	DELAY FIXED(SWITCH Start Medical Care I, Implementation Time Medical Care I+Duration Medical Care I\
+		 , 0 )
+	~	
+	~		|
+
+SWITCH End Medical Care II=
+	DELAY FIXED(SWITCH Start Medical Care II, Implementation Time Medical Care II+Duration Medical Care II\
+		 , 0 )
+	~	
+	~		|
+
+SWITCH End Public Edu=
+	DELAY FIXED(SWITCH Start Public Edu, Implementation Time Public Edu+Duration Public Edu\
+		 , 0 )
+	~	
+	~		|
+
+SWITCH End Public Info=
+	DELAY FIXED(SWITCH Start Public Info, Implementation Time Public Info+Duration Public Info\
+		 , 0 )
+	~	
+	~		|
+
+SWITCH End Social Distance I=
+	DELAY FIXED(SWITCH Start Social Distance I, Implementation Time Social Distance I+Duration Social Distance I\
+		 , 0 )
+	~	
+	~		|
+
+SWITCH Implement Medical Care I=
+	DELAY FIXED(SWITCH Start Medical Care I, Implementation Time Medical Care I , 0 )
+	~	
+	~		|
+
+Transmission Coefficient Active Medical Care II=
+	IF THEN ELSE(Active Controller Medical Care II =1,Base Transmission Coefficient Medical Care II\
+		 ,1)
+	~	
+	~		|
+
+SWITCH End Tracing=
+	DELAY FIXED(SWITCH Start Tracing, Implementation Time Tracing+Duration Tracing , 0 )
+	~	
+	~		|
+
+SWITCH Implement=
+	DELAY FIXED(SWITCH Start, Implementation Time , 0 )
+	~	
+	~		|
+
+SWITCH Implement Case Isolation=
+	DELAY FIXED(SWITCH Start Case Isolation, Implementation Time Case Isolation , 0 )
+	~	
+	~		|
+
+SWITCH Implement Facemasks=
+	DELAY FIXED(SWITCH Start Facemasks, Implementation Time Facemasks , 0 )
+	~	
+	~		|
+
+SWITCH Implement Public Edu=
+	DELAY FIXED(SWITCH Start Public Edu, Implementation Time Public Edu , 0 )
+	~	
+	~		|
+
+SWITCH Implement Public Info=
+	DELAY FIXED(SWITCH Start Public Info, Implementation Time Public Info , 0 )
+	~	
+	~		|
+
+Transmission Coefficient Active Social Distance I=
+	IF THEN ELSE( Active Controller Social Distance I=1,Base Transmission Coefficient Social Distance I\
+		 ,1)
+	~	
+	~		|
+
+Transmission Coefficient Active Social Distance II=
+	IF THEN ELSE( Active Controller Social Distance II=1, Base Transmission Coefficient Social Distance II\
+		,1)
+	~	
+	~		|
+
+Transmission Coefficient Active Facemasks=
+	IF THEN ELSE(Active Controller Facemasks =1,Base Transmission Coefficient Facemasks \
+		,1)
+	~	
+	~		|
+
+Transmission Coefficient Active=
+	Base Transmission Coefficient*Active Controller
+	~	
+	~		|
+
+Transmission Coefficient Active Medical Care I=
+	IF THEN ELSE( Active Controller Medical Care I=1, Base Transmission Coefficient Medical Care I\
+		,1)
+	~	
+	~		|
+
+Transmission Coefficient Active Public Info=
+	IF THEN ELSE( Active Controller Public Info=1,Base Transmission Coefficient Public Info\
+		 ,1)
+	~	
+	~		|
+
+Transmission Coefficient Active Case Isolation=
+	IF THEN ELSE( Active Controller Case Isolation=1, Base Transmission Coefficient Case Isolation\
+		,1)
+	~	
+	~		|
+
+True case fatality rate=
+	recovery coefficient*Case fatality rate
+	~	Dmnl
+	~		|
+
+Surviving=
+	( 1 - True case fatality rate) * Infectious population / Average infectious period
+	~	Person/Day
+	~		|
+
+coefficient size=
+	contact rate coefficient + recovery coefficient
+	~	
+	~		|
+
+Case fatality rate=
+	0.01
+	~	
+	~		|
+
+Dying=
+	True case fatality rate* Infectious population / Average infectious period
+	~	Person/Day
+	~		|
+
+Infecting=
+	contact rate coefficient * Infectious population * Basic reproduction number * Fraction susceptible population\
+		 / Average infectious period
+	~	Person/Day
+	~	Original: Infectious population * Basic reproduction number * Fraction \
+		susceptible population / Average infectious period
+	|
+
+Average incubation time=
+	2
+	~	Day
+	~		|
+
+Average infectious period=
+	14
+	~	Day
+	~		|
+
+Basic reproduction number=
+	2
+	~	Dmnl
+	~		|
+
+Deceased population= INTEG (
+	Dying,
+		Initial deceased population)
+	~	Person
+	~		|
+
+Fraction susceptible population=
+	Susceptible population / Total population
+	~	Dmnl
+	~		|
+
+Incubation=
+	IF THEN ELSE ( Switch SEIR or SIR = 1 , Exposed population / Average incubation time\
+		 , Infecting )
+	~	Person/Day
+	~		|
+
+Infectious population= INTEG (
+	Incubation-Dying-Surviving,
+		Initial infectious population)
+	~	Person
+	~		|
+
+Initial deceased population=
+	0
+	~	Person
+	~		|
+
+Initial exposed population=
+	0
+	~	Person
+	~		|
+
+Initial infectious population=
+	1
+	~	Person
+	~		|
+
+Initial recovered population=
+	0
+	~	Person
+	~		|
+
+Initial susceptible population=
+	100000
+	~	Person
+	~		|
+
+Recovered population= INTEG (
+	Surviving,
+		Initial recovered population)
+	~	Person
+	~		|
+
+Switch SEIR or SIR=
+	0
+	~	Dmnl [1,1,2]
+	~	1 = SEIR, ELSE = SIR
+	|
+
+Total population=
+	Susceptible population + Exposed population + Infectious population + Recovered population\
+		+Immune Population
+	~	Person
+	~		|
+
+********************************************************
+	.Control
+********************************************************~
+		Simulation Control Parameters
+	|
+
+FINAL TIME  = 360
+	~	Day
+	~	The final time for the simulation.
+	|
+
+INITIAL TIME  = 0
+	~	Day
+	~	The initial time for the simulation.
+	|
+
+SAVEPER  = 
+        TIME STEP
+	~	Day [0,?]
+	~	The frequency with which output is stored.
+	|
+
+TIME STEP  = 0.125
+	~	Day [0,?]
+	~	The time step for the simulation.
+	|
+
+\\\---/// Sketch information - do not modify anything except names
+V300  Do not put anything below this section - it will be ignored
+*View 1
+$192-192-192,0,Arial|12||0-0-0|0-0-0|0-166-214|-1--1--1|-1--1--1|120,120,80,0
+10,1,Susceptible population,1131,35,54,25,3,131,0,0,0,0,0,0
+10,2,Exposed population,1437,35,50,25,3,131,0,0,0,0,0,0
+10,3,Infectious population,1747,35,50,25,3,3,0,0,0,0,0,0
+10,4,Recovered population,2057,35,50,25,3,3,0,0,0,0,0,0
+10,5,Deceased population,1747,-189,50,25,3,3,0,0,0,0,0,0
+1,6,8,2,4,0,0,22,0,0,0,-1--1--1,,1|(1338,35)|
+1,7,8,1,100,0,0,22,0,0,0,-1--1--1,,1|(1229,35)|
+11,8,3724,1282,35,8,10,34,3,0,0,1,0,0,0
+10,9,Infecting,1282,59,39,13,40,3,0,0,-1,0,0,0
+1,10,12,3,4,0,0,22,0,0,0,-1--1--1,,1|(1648,35)|
+1,11,12,2,100,0,0,22,0,0,0,-1--1--1,,1|(1535,35)|
+11,12,492,1592,35,8,10,34,3,0,0,1,0,0,0
+10,13,Incubation,1592,59,46,13,40,3,0,0,-1,0,0,0
+1,14,16,5,4,0,0,22,0,0,0,-1--1--1,,1|(1747,-124)|
+1,15,16,3,100,0,0,22,0,0,0,-1--1--1,,1|(1747,-29)|
+11,16,508,1747,-77,10,8,33,3,0,0,4,0,0,0
+10,17,Dying,1782,-77,28,13,40,3,0,0,-1,0,0,0
+1,18,20,4,4,0,0,22,0,0,0,-1--1--1,,1|(1958,35)|
+1,19,20,3,100,0,0,22,0,0,0,-1--1--1,,1|(1845,35)|
+11,20,3660,1902,35,8,10,34,3,0,0,1,0,0,0
+10,21,Surviving,1902,59,43,13,40,3,0,0,-1,0,0,0
+10,22,Initial susceptible population,898,-86,81,24,8,3,0,18,0,0,0,0,0-0-0,0-0-0,|12|I|107-134-137
+10,23,Initial exposed population,890,-16,69,24,8,3,0,18,0,0,0,0,0-0-0,0-0-0,|12|I|107-134-137
+10,24,Initial infectious population,881,127,73,24,8,3,0,18,0,0,0,0,0-0-0,0-0-0,|12|I|107-134-137
+10,25,Initial deceased population,888,61,74,24,8,3,0,18,0,0,0,0,0-0-0,0-0-0,|12|I|107-134-137
+10,26,Initial recovered population,882,199,75,24,8,3,0,18,0,0,0,0,0-0-0,0-0-0,|12|I|107-134-137
+1,27,24,3,0,0,0,0,0,64,1,-1--1--1,,1|(1318,82)|
+1,28,26,4,0,0,0,0,0,64,1,-1--1--1,,1|(1475,117)|
+1,29,25,5,0,0,0,0,0,64,1,-1--1--1,,1|(1322,-65)|
+10,30,Total population,1551,-180,71,13,8,3,0,0,0,0,0,0
+10,31,Switch SEIR or SIR,1797,174,58,23,8,3,0,6,0,0,0,0,-1--1--1,165-202-26,|12||255-255-255
+10,32,Fraction susceptible population,1243,-152,53,34,8,3,0,0,0,0,0,0
+1,33,30,32,1,0,0,0,0,64,0,-1--1--1,,1|(1388,-128)|
+1,34,1,30,1,0,0,0,0,64,0,-1--1--1,,1|(1342,-15)|
+1,35,2,30,0,0,0,0,0,64,0,-1--1--1,,1|(1493,-72)|
+1,36,3,30,0,0,0,0,0,64,0,-1--1--1,,1|(1648,-73)|
+1,37,4,30,0,0,0,0,0,64,0,-1--1--1,,1|(1800,-73)|
+1,38,1,32,1,0,0,0,0,64,0,-1--1--1,,1|(1199,-55)|
+1,39,32,9,1,0,0,0,0,64,0,-1--1--1,,1|(1280,0)|
+1,40,3,17,1,0,0,0,0,64,0,-1--1--1,,1|(1807,-25)|
+1,41,3,21,1,0,0,0,0,64,0,-1--1--1,,1|(1845,88)|
+10,42,True case fatality rate,1994,-130,50,23,8,131,0,0,0,0,0,0
+1,43,42,17,1,0,0,0,0,64,0,-1--1--1,,1|(1880,-141)|
+1,44,42,20,1,0,0,0,0,64,0,-1--1--1,,1|(1975,-31)|
+10,45,Basic reproduction number,1275,157,88,24,8,3,0,18,0,0,0,0,0-0-0,0-0-0,|12|I|109-23-127
+1,46,45,8,1,0,0,0,0,64,0,-1--1--1,,1|(1281,97)|
+10,47,Average infectious period,1949,-240,46,35,8,131,0,16,0,0,0,0,0-0-0,0-0-0,|12|I|0-0-0
+10,48,Average incubation time,1597,158,73,24,8,3,0,16,0,0,0,0,0-0-0,0-0-0,|12|I|0-0-0
+1,49,48,13,0,0,0,0,0,64,0,-1--1--1,,1|(1594,110)|
+1,50,2,13,1,0,0,0,0,64,0,-1--1--1,,1|(1497,68)|
+1,51,47,17,1,0,0,0,0,64,0,-1--1--1,,1|(1821,-174)|
+1,52,47,20,1,0,0,0,0,64,0,-1--1--1,,1|(1870,-142)|
+1,53,47,9,1,0,0,0,0,64,0,-1--1--1,,1|(1570,-302)|
+1,54,3,9,1,0,0,0,0,64,0,-1--1--1,,1|(1546,-60)|
+1,55,31,13,1,0,0,0,0,64,0,-1--1--1,,1|(1674,145)|
+1,56,9,13,1,0,0,0,0,64,0,-1--1--1,,1|(1407,121)|
+10,57,contact rate coefficient,1119,-547,54,23,8,3,0,4,0,0,0,0,-1--1--1,192-128-192,|12||0-0-0
+1,58,57,8,1,0,0,0,0,128,0,-1--1--1,,1|(1281,-215)|
+10,59,recovery coefficient,1953,-547,64,23,8,131,0,4,0,0,0,0,-1--1--1,192-128-192,|12||0-0-0
+10,60,Case fatality rate,2158,-81,59,24,8,3,0,18,0,0,0,0,-1--1--1,0-0-0,|12|I|128-0-128
+1,61,59,42,1,0,0,0,0,128,0,-1--1--1,,1|(1997,-299)|
+1,62,60,42,1,0,0,0,0,128,0,-1--1--1,,1|(2040,-106)|
+10,63,coefficient size,1575,-532,68,13,8,3,0,0,0,0,0,0
+1,64,57,63,1,0,0,0,0,128,0,-1--1--1,,1|(1386,-576)|
+1,65,59,63,1,0,0,0,0,128,0,-1--1--1,,1|(1732,-555)|
+10,66,Activation Time,-1778,-1882,45,23,8,3,0,0,0,0,0,0
+10,67,SWITCH Start,-1626,-1887,41,23,8,3,0,0,0,0,0,0
+10,68,Base Transmission Coefficient,-1625,-1714,87,23,8,3,0,0,0,0,0,0
+10,69,Implementation Time,-1625,-1833,70,23,8,3,0,0,0,0,0,0
+10,70,Duration,-1631,-1782,39,13,8,3,0,0,0,0,0,0
+10,71,Base Recovery Coefficient,-1626,-1653,71,23,8,3,0,0,0,0,0,0
+10,72,Base Societal Stress Coefficient,-1620,-1581,82,23,8,3,0,0,0,0,0,0
+10,73,Base Effort Coefficient,-1620,-1518,53,23,8,3,0,0,0,0,0,0
+1,74,66,67,0,0,0,0,0,128,0,-1--1--1,,1|(-1706,-1883)|
+10,75,Time,-1628,-1931,36,13,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,76,75,67,0,0,0,0,0,64,0,-1--1--1,,1|(-1628,-1920)|
+10,77,Time,-1070,-1478,36,13,8,2,1,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,78,Time,1529,-2018,36,13,8,2,1,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,79,Activation TimeOld,-2687,-1882,45,23,8,3,0,0,0,0,0,0
+10,80,SWITCHOld,-2535,-1887,56,13,8,3,0,0,0,0,0,0
+10,81,Base Transmission CoefficientOld,-2534,-1812,87,23,8,3,0,0,0,0,0,0
+10,82,Implementation TimeOld,-2535,-1744,70,23,8,3,0,0,0,0,0,0
+10,83,DurationOld,-2532,-1692,54,13,8,3,0,0,0,0,0,0
+10,84,Base Recovery CoefficientOld,-2531,-1638,71,23,8,3,0,0,0,0,0,0
+10,85,Base Societal Stress CoefficientOld,-2529,-1581,98,23,8,3,0,0,0,0,0,0
+10,86,Base Effort CoefficientOld,-2529,-1518,66,23,8,3,0,0,0,0,0,0
+10,87,SWITCH TimeoutOld,-2364,-1700,54,23,8,3,0,0,0,0,0,0
+10,88,CoefficientOld,-2180,-1895,66,11,8,3,0,0,0,0,0,0
+10,89,Delayed CoefficientOld,-2170,-1768,66,23,8,3,0,0,0,0,0,0
+10,90,Controlled CoefficientOld,-2169,-1705,66,23,8,3,0,0,0,0,0,0
+1,91,79,80,0,0,0,0,0,128,0,-1--1--1,,1|(-2623,-1883)|
+1,92,80,88,0,0,0,0,0,128,0,-1--1--1,,1|(-2369,-1890)|
+1,93,88,89,0,0,0,0,0,128,0,-1--1--1,,1|(-2176,-1844)|
+1,94,89,90,0,0,0,0,0,128,0,-1--1--1,,1|(-2169,-1743)|
+1,95,87,90,0,0,0,0,0,128,0,-1--1--1,,1|(-2279,-1701)|
+1,96,83,87,0,0,0,0,0,128,0,-1--1--1,,1|(-2454,-1695)|
+1,97,82,87,0,0,0,0,0,128,0,-1--1--1,,1|(-2448,-1721)|
+1,98,81,88,0,0,0,0,0,128,0,-1--1--1,,1|(-2343,-1856)|
+1,99,80,87,1,0,0,0,0,128,0,-1--1--1,,1|(-2421,-1828)|
+10,100,Time,-2537,-1931,36,13,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,101,100,80,0,0,0,0,0,64,0,-1--1--1,,1|(-2536,-1915)|
+1,102,82,89,0,0,0,0,0,128,0,-1--1--1,,1|(-2357,-1755)|
+10,103,SWITCH Implement,-1324,-1908,48,23,8,3,0,0,0,0,0,0
+10,104,SWITCH End,-1333,-1833,62,11,8,3,0,0,0,0,0,0
+1,105,67,103,0,0,0,0,0,128,0,-1--1--1,,1|(-1485,-1896)|
+1,106,69,103,0,0,0,0,0,128,0,-1--1--1,,1|(-1470,-1871)|
+1,107,70,104,0,0,0,0,0,128,0,-1--1--1,,1|(-1500,-1803)|
+1,108,69,104,0,0,0,0,0,128,0,-1--1--1,,1|(-1482,-1833)|
+1,109,67,104,0,0,0,0,0,64,0,-1--1--1,,1|(-1495,-1863)|
+10,110,Active Controller,-1136,-1862,41,23,8,3,0,0,0,0,0,0
+1,111,103,110,0,0,0,0,0,128,0,-1--1--1,,1|(-1233,-1886)|
+1,112,104,110,0,0,0,0,0,128,0,-1--1--1,,1|(-1230,-1847)|
+10,113,Transmission Coefficient Active,-1165,-1723,80,23,8,3,0,0,0,0,0,0
+10,114,Recovery Coefficient Active,-1003,-1672,80,23,8,3,0,0,0,0,0,0
+1,115,110,113,0,0,0,0,0,128,0,-1--1--1,,1|(-1148,-1799)|
+1,116,110,114,0,0,0,0,0,128,0,-1--1--1,,1|(-1073,-1772)|
+1,117,68,113,0,0,0,0,0,128,0,-1--1--1,,1|(-1398,-1717)|
+1,118,71,114,0,0,0,0,0,128,0,-1--1--1,,1|(-1325,-1661)|
+10,119,Societal Stress Coefficient Active,-1156,-1602,80,23,8,3,0,0,0,0,0,0
+10,120,Effort Coefficient Active,-1026,-1540,80,23,8,3,0,0,0,0,0,0
+1,121,72,119,0,0,0,0,0,128,0,-1--1--1,,1|(-1393,-1590)|
+1,122,73,120,0,0,0,0,0,128,0,-1--1--1,,1|(-1343,-1527)|
+1,123,110,119,0,0,0,0,0,128,0,-1--1--1,,1|(-1144,-1738)|
+1,124,110,120,0,0,0,0,0,128,0,-1--1--1,,1|(-1083,-1707)|
+10,125,SWITCH Start Public Edu,-2556,-1117,67,23,8,3,0,0,0,0,0,0
+10,126,Base Transmission Coefficient Public Edu,-2555,-944,100,23,8,3,0,0,0,0,0,0
+10,127,Implementation Time Public Edu,-2555,-1063,74,23,8,3,0,0,0,0,0,0
+10,128,Duration Public Edu,-2561,-1012,69,23,8,3,0,0,0,0,0,0
+10,129,Base Recovery Coefficient Public Edu,-2556,-883,100,23,8,3,0,0,0,0,0,0
+10,130,Base Societal Stress Coefficient Public Edu,-2550,-811,100,23,8,3,0,0,0,0,0,0
+10,131,Base Effort Coefficient Public Edu,-2550,-748,80,34,8,3,0,0,0,0,0,0
+10,132,Time,-2558,-1161,36,13,8,2,1,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,133,Time,-2000,-708,36,13,8,2,1,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,134,SWITCH Implement Public Edu,-2254,-1138,79,34,8,3,0,0,0,0,0,0
+10,135,SWITCH End Public Edu,-2263,-1063,62,23,8,3,0,0,0,0,0,0
+1,136,125,134,0,0,0,0,0,128,0,-1--1--1,,1|(-2417,-1126)|
+1,137,127,134,0,0,0,0,0,128,0,-1--1--1,,1|(-2413,-1097)|
+1,138,128,135,0,0,0,0,0,128,0,-1--1--1,,1|(-2415,-1036)|
+1,139,127,135,0,0,0,0,0,128,0,-1--1--1,,1|(-2410,-1063)|
+1,140,125,135,0,0,0,0,0,64,0,-1--1--1,,1|(-2413,-1090)|
+10,141,Active Controller Public Edu,-2066,-1092,76,23,8,3,0,0,0,0,0,0
+1,142,134,141,0,0,0,0,0,128,0,-1--1--1,,1|(-2165,-1116)|
+1,143,135,141,0,0,0,0,0,128,0,-1--1--1,,1|(-2178,-1075)|
+10,144,Transmission Coefficient Active Public Edu,-2095,-953,80,34,8,3,0,0,0,0,0,0
+10,145,Recovery Coefficient Active Public Edu,-1933,-902,96,23,8,3,0,0,0,0,0,0
+1,146,141,144,0,0,0,0,0,128,0,-1--1--1,,1|(-2077,-1034)|
+1,147,141,145,0,0,0,0,0,128,0,-1--1--1,,1|(-2003,-1002)|
+1,148,126,144,0,0,0,0,0,128,0,-1--1--1,,1|(-2321,-947)|
+1,149,129,145,0,0,0,0,0,128,0,-1--1--1,,1|(-2249,-892)|
+10,150,Societal Stress Coefficient Active Public Edu,-2086,-832,80,34,8,3,0,0,0,0,0,0
+10,151,Effort Coefficient Active Public Edu,-1956,-770,80,23,8,3,0,0,0,0,0,0
+1,152,130,150,0,0,0,0,0,128,0,-1--1--1,,1|(-2314,-821)|
+1,153,131,151,0,0,0,0,0,128,0,-1--1--1,,1|(-2259,-758)|
+1,154,141,150,0,0,0,0,0,128,0,-1--1--1,,1|(-2074,-974)|
+1,155,141,151,0,0,0,0,0,128,0,-1--1--1,,1|(-2013,-937)|
+10,156,SWITCH Start Public Info,-1451,-1122,67,23,8,3,0,0,0,0,0,0
+10,157,Base Transmission Coefficient Public Info,-1450,-949,100,23,8,3,0,0,0,0,0,0
+10,158,Implementation Time Public Info,-1450,-1068,74,23,8,3,0,0,0,0,0,0
+10,159,Duration Public Info,-1456,-1017,69,23,8,3,0,0,0,0,0,0
+10,160,Base Recovery Coefficient Public Info,-1451,-888,100,23,8,3,0,0,0,0,0,0
+10,161,Base Societal Stress Coefficient Public Info,-1445,-816,100,23,8,3,0,0,0,0,0,0
+10,162,Base Effort Coefficient Public Info,-1445,-753,80,34,8,3,0,0,0,0,0,0
+10,163,Time,-1453,-1166,36,13,8,2,1,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,164,Time,-895,-713,36,13,8,2,1,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,165,SWITCH Implement Public Info,-1149,-1143,79,34,8,3,0,0,0,0,0,0
+10,166,SWITCH End Public Info,-1158,-1068,62,23,8,3,0,0,0,0,0,0
+1,167,156,165,0,0,0,0,0,128,0,-1--1--1,,1|(-1312,-1131)|
+1,168,158,165,0,0,0,0,0,128,0,-1--1--1,,1|(-1308,-1102)|
+1,169,159,166,0,0,0,0,0,128,0,-1--1--1,,1|(-1310,-1041)|
+1,170,158,166,0,0,0,0,0,128,0,-1--1--1,,1|(-1305,-1068)|
+1,171,156,166,0,0,0,0,0,64,0,-1--1--1,,1|(-1308,-1095)|
+10,172,Active Controller Public Info,-961,-1097,76,23,8,3,0,0,0,0,0,0
+1,173,165,172,0,0,0,0,0,128,0,-1--1--1,,1|(-1060,-1121)|
+1,174,166,172,0,0,0,0,0,128,0,-1--1--1,,1|(-1073,-1080)|
+10,175,Transmission Coefficient Active Public Info,-990,-958,80,34,8,3,0,0,0,0,0,0
+10,176,Recovery Coefficient Active Public Info,-828,-907,96,23,8,3,0,0,0,0,0,0
+1,177,172,175,0,0,0,0,0,128,0,-1--1--1,,1|(-972,-1039)|
+1,178,172,176,0,0,0,0,0,128,0,-1--1--1,,1|(-898,-1007)|
+1,179,157,175,0,0,0,0,0,128,0,-1--1--1,,1|(-1216,-952)|
+1,180,160,176,0,0,0,0,0,128,0,-1--1--1,,1|(-1144,-897)|
+10,181,Societal Stress Coefficient Active Public Info,-981,-837,80,34,8,3,0,0,0,0,0,0
+10,182,Effort Coefficient Active Public Info,-851,-775,79,23,8,3,0,0,0,0,0,0
+1,183,161,181,0,0,0,0,0,128,0,-1--1--1,,1|(-1209,-826)|
+1,184,162,182,0,0,0,0,0,128,0,-1--1--1,,1|(-1154,-763)|
+1,185,172,181,0,0,0,0,0,128,0,-1--1--1,,1|(-969,-979)|
+1,186,172,182,0,0,0,0,0,128,0,-1--1--1,,1|(-908,-942)|
+10,187,SWITCH Start Case Isolation,-2556,-467,67,23,8,3,0,0,0,0,0,0
+10,188,Base Transmission Coefficient Case Isolation,-2555,-294,87,34,8,3,0,0,0,0,0,0
+10,189,Implementation Time Case Isolation,-2555,-413,92,23,8,3,0,0,0,0,0,0
+10,190,Duration Case Isolation,-2561,-362,66,23,8,3,0,0,0,0,0,0
+10,191,Base Recovery Coefficient Case Isolation,-2556,-233,77,34,8,3,0,0,0,0,0,0
+10,192,Base Societal Stress Coefficient Case Isolation,-2550,-161,97,34,8,3,0,0,0,0,0,0
+10,193,Base Effort Coefficient Case Isolation,-2550,-98,77,34,8,3,0,0,0,0,0,0
+10,194,Time,-2558,-511,36,13,8,2,1,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,195,Time,-2000,-58,36,13,8,2,1,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,196,SWITCH Implement Case Isolation,-2254,-488,92,23,8,3,0,0,0,0,0,0
+10,197,SWITCH End Case Isolation,-2263,-413,66,23,8,3,0,0,0,0,0,0
+1,198,187,196,0,0,0,0,0,128,0,-1--1--1,,1|(-2424,-475)|
+1,199,189,196,0,0,0,0,0,128,0,-1--1--1,,1|(-2411,-448)|
+1,200,190,197,0,0,0,0,0,128,0,-1--1--1,,1|(-2418,-385)|
+1,201,189,197,0,0,0,0,0,128,0,-1--1--1,,1|(-2403,-413)|
+1,202,187,197,0,0,0,0,0,64,0,-1--1--1,,1|(-2415,-441)|
+10,203,Active Controller Case Isolation,-2066,-442,76,23,8,3,0,0,0,0,0,0
+1,204,196,203,0,0,0,0,0,128,0,-1--1--1,,1|(-2158,-465)|
+1,205,197,203,0,0,0,0,0,128,0,-1--1--1,,1|(-2176,-424)|
+10,206,Transmission Coefficient Active Case Isolation,-2095,-303,80,34,8,3,0,0,0,0,0,0
+10,207,Recovery Coefficient Active Case Isolation,-1933,-252,97,23,8,3,0,0,0,0,0,0
+1,208,203,206,0,0,0,0,0,128,0,-1--1--1,,1|(-2077,-384)|
+1,209,203,207,0,0,0,0,0,128,0,-1--1--1,,1|(-2003,-352)|
+1,210,188,206,0,0,0,0,0,128,0,-1--1--1,,1|(-2328,-297)|
+1,211,191,207,0,0,0,0,0,128,0,-1--1--1,,1|(-2261,-241)|
+10,212,Societal Stress Coefficient Active Case Isolation,-2086,-182,107,34,8,3,0,0,0,0,0,0
+10,213,Effort Coefficient Active Case Isolation,-1956,-120,97,23,8,3,0,0,0,0,0,0
+1,214,192,212,0,0,0,0,0,128,0,-1--1--1,,1|(-2329,-170)|
+1,215,193,213,0,0,0,0,0,128,0,-1--1--1,,1|(-2269,-107)|
+1,216,203,212,0,0,0,0,0,128,0,-1--1--1,,1|(-2074,-324)|
+1,217,203,213,0,0,0,0,0,128,0,-1--1--1,,1|(-2013,-287)|
+10,218,SWITCH Start Tracing,-1406,-457,67,23,8,3,0,0,0,0,0,0
+10,219,Base Transmission Coefficient Tracing,-1405,-284,87,23,8,3,0,0,0,0,0,0
+10,220,Implementation Time Tracing,-1405,-403,70,23,8,3,0,0,0,0,0,0
+10,221,Duration Tracing,-1411,-352,39,23,8,3,0,0,0,0,0,0
+10,222,Base Recovery Coefficient Tracing,-1406,-223,86,23,8,3,0,0,0,0,0,0
+10,223,Base Societal Stress Coefficient Tracing,-1400,-151,97,23,8,3,0,0,0,0,0,0
+10,224,Base Effort Coefficient Tracing,-1400,-88,86,23,8,3,0,0,0,0,0,0
+10,225,Time,-1408,-501,36,13,8,2,1,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,226,Time,-850,-48,36,13,8,2,1,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,227,SWITCH Implement Tracing,-1104,-478,85,23,8,3,0,0,0,0,0,0
+10,228,SWITCH End Tracing,-1113,-403,62,23,8,3,0,0,0,0,0,0
+1,229,218,227,0,0,0,0,0,128,0,-1--1--1,,1|(-1270,-465)|
+1,230,220,227,0,0,0,0,0,128,0,-1--1--1,,1|(-1268,-436)|
+1,231,221,228,0,0,0,0,0,128,0,-1--1--1,,1|(-1280,-373)|
+1,232,220,228,0,0,0,0,0,128,0,-1--1--1,,1|(-1262,-403)|
+1,233,218,228,0,0,0,0,0,64,0,-1--1--1,,1|(-1263,-430)|
+10,234,Active Controller Tracing,-916,-432,76,23,8,3,0,0,0,0,0,0
+1,235,227,234,0,0,0,0,0,128,0,-1--1--1,,1|(-1012,-455)|
+1,236,228,234,0,0,0,0,0,128,0,-1--1--1,,1|(-1028,-415)|
+10,237,Transmission Coefficient Active Tracing,-945,-293,80,34,8,3,0,0,0,0,0,0
+10,238,Recovery Coefficient Active Tracing,-783,-242,80,34,8,3,0,0,0,0,0,0
+1,239,234,237,0,0,0,0,0,128,0,-1--1--1,,1|(-927,-374)|
+1,240,234,238,0,0,0,0,0,128,0,-1--1--1,,1|(-857,-348)|
+1,241,219,237,0,0,0,0,0,128,0,-1--1--1,,1|(-1178,-287)|
+1,242,222,238,0,0,0,0,0,128,0,-1--1--1,,1|(-1098,-231)|
+10,243,Societal Stress Coefficient Active Tracing,-936,-172,80,34,8,3,0,0,0,0,0,0
+10,244,Effort Coefficient Active Tracing,-806,-110,78,23,8,3,0,0,0,0,0,0
+1,245,223,243,0,0,0,0,0,128,0,-1--1--1,,1|(-1166,-161)|
+1,246,224,244,0,0,0,0,0,128,0,-1--1--1,,1|(-1105,-98)|
+1,247,234,243,0,0,0,0,0,128,0,-1--1--1,,1|(-924,-314)|
+1,248,234,244,0,0,0,0,0,128,0,-1--1--1,,1|(-863,-277)|
+10,249,SWITCH Start Medical Care I,-2501,203,68,23,8,3,0,0,0,0,0,0
+10,250,Base Transmission Coefficient Medical Care I,-2500,376,88,34,8,3,0,0,0,0,0,0
+10,251,Implementation Time Medical Care I,-2500,257,94,23,8,3,0,0,0,0,0,0
+10,252,Duration Medical Care I,-2506,308,68,23,8,3,0,0,0,0,0,0
+10,253,Base Recovery Coefficient Medical Care I,-2501,437,88,34,8,3,0,0,0,0,0,0
+10,254,Base Societal Stress Coefficient Medical Care I,-2495,509,97,34,8,3,0,0,0,0,0,0
+10,255,Base Effort Coefficient Medical Care I,-2495,572,88,34,8,3,0,0,0,0,0,0
+10,256,Time,-2503,159,36,13,8,2,1,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,257,Time,-1945,612,36,13,8,2,1,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,258,SWITCH Implement Medical Care I,-2199,182,92,23,8,3,0,0,0,0,0,0
+10,259,SWITCH End Medical Care I,-2208,257,68,23,8,3,0,0,0,0,0,0
+1,260,249,258,0,0,0,0,0,128,0,-1--1--1,,1|(-2368,195)|
+1,261,251,258,0,0,0,0,0,128,0,-1--1--1,,1|(-2356,222)|
+1,262,252,259,0,0,0,0,0,128,0,-1--1--1,,1|(-2363,283)|
+1,263,251,259,0,0,0,0,0,128,0,-1--1--1,,1|(-2348,257)|
+1,264,249,259,0,0,0,0,0,64,0,-1--1--1,,1|(-2361,229)|
+10,265,Active Controller Medical Care I,-2011,228,76,23,8,3,0,0,0,0,0,0
+1,266,258,265,0,0,0,0,0,128,0,-1--1--1,,1|(-2103,205)|
+1,267,259,265,0,0,0,0,0,128,0,-1--1--1,,1|(-2120,244)|
+10,268,Transmission Coefficient Active Medical Care I,-2040,367,80,34,8,3,0,0,0,0,0,0
+10,269,Recovery Coefficient Active Medical Care I,-1878,418,99,23,8,3,0,0,0,0,0,0
+1,270,265,268,0,0,0,0,0,128,0,-1--1--1,,1|(-2022,285)|
+1,271,265,269,0,0,0,0,0,128,0,-1--1--1,,1|(-1948,317)|
+1,272,250,268,0,0,0,0,0,128,0,-1--1--1,,1|(-2272,371)|
+1,273,253,269,0,0,0,0,0,128,0,-1--1--1,,1|(-2201,428)|
+10,274,Societal Stress Coefficient Active Medical Care I,-2031,488,80,34,8,3,0,0,0,0,0,0
+10,275,Effort Coefficient Active Medical Care I,-1901,550,99,23,8,3,0,0,0,0,0,0
+1,276,254,274,0,0,0,0,0,128,0,-1--1--1,,1|(-2261,498)|
+1,277,255,275,0,0,0,0,0,128,0,-1--1--1,,1|(-2210,561)|
+1,278,265,274,0,0,0,0,0,128,0,-1--1--1,,1|(-2019,345)|
+1,279,265,275,0,0,0,0,0,128,0,-1--1--1,,1|(-1958,382)|
+10,280,SWITCH Start Medical Care II,-2471,898,71,23,8,3,0,0,0,0,0,0
+10,281,Base Transmission Coefficient Medical Care II,-2470,1071,88,34,8,3,0,0,0,0,0,0
+10,282,Implementation Time Medical Care II,-2470,952,97,23,8,3,0,0,0,0,0,0
+10,283,Duration Medical Care II,-2476,1003,78,23,8,3,0,0,0,0,0,0
+10,284,Base Recovery Coefficient Medical Care II,-2471,1132,88,34,8,3,0,0,0,0,0,0
+10,285,Base Societal Stress Coefficient Medical Care II,-2465,1204,97,34,8,3,0,0,0,0,0,0
+10,286,Base Effort Coefficient Medical Care II,-2465,1267,88,34,8,3,0,0,0,0,0,0
+10,287,Time,-2473,854,36,13,8,2,1,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,288,Time,-1915,1307,36,13,8,2,1,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,289,SWITCH Implement Medical Care II,-2169,877,92,23,8,3,0,0,0,0,0,0
+10,290,SWITCH End Medical Care II,-2178,952,71,23,8,3,0,0,0,0,0,0
+1,291,280,289,0,0,0,0,0,128,0,-1--1--1,,1|(-2337,889)|
+1,292,282,289,0,0,0,0,0,128,0,-1--1--1,,1|(-2326,915)|
+1,293,283,290,0,0,0,0,0,128,0,-1--1--1,,1|(-2330,978)|
+1,294,282,290,0,0,0,0,0,128,0,-1--1--1,,1|(-2318,952)|
+1,295,280,290,0,0,0,0,0,64,0,-1--1--1,,1|(-2331,923)|
+10,296,Active Controller Medical Care II,-1981,923,76,23,8,3,0,0,0,0,0,0
+1,297,289,296,0,0,0,0,0,128,0,-1--1--1,,1|(-2073,899)|
+1,298,290,296,0,0,0,0,0,128,0,-1--1--1,,1|(-2088,939)|
+10,299,Transmission Coefficient Active Medical Care II,-2010,1062,80,34,8,3,0,0,0,0,0,0
+10,300,Recovery Coefficient Active Medical Care II,-1848,1113,102,23,8,3,0,0,0,0,0,0
+1,301,296,299,0,0,0,0,0,128,0,-1--1--1,,1|(-1992,980)|
+1,302,296,300,0,0,0,0,0,128,0,-1--1--1,,1|(-1918,1012)|
+1,303,281,299,0,0,0,0,0,128,0,-1--1--1,,1|(-2242,1066)|
+1,304,284,300,0,0,0,0,0,128,0,-1--1--1,,1|(-2173,1123)|
+10,305,Societal Stress Coefficient Active Medical Care II,-2001,1183,80,34,8,3,0,0,0,0,0,0
+10,306,Effort Coefficient Active Medical Care II,-1871,1245,93,34,8,3,0,0,0,0,0,0
+1,307,285,305,0,0,0,0,0,128,0,-1--1--1,,1|(-2231,1193)|
+1,308,286,306,0,0,0,0,0,128,0,-1--1--1,,1|(-2177,1256)|
+1,309,296,305,0,0,0,0,0,128,0,-1--1--1,,1|(-1989,1040)|
+1,310,296,306,0,0,0,0,0,128,0,-1--1--1,,1|(-1930,1071)|
+10,311,SWITCH Start Facemasks,-2476,1598,67,23,8,3,0,0,0,0,0,0
+10,312,Base Transmission Coefficient Facemasks,-2475,1771,105,23,8,3,0,0,0,0,0,0
+10,313,Implementation Time Facemasks,-2475,1652,79,23,8,3,0,0,0,0,0,0
+10,314,Duration Facemasks,-2481,1703,54,23,8,3,0,0,0,0,0,0
+10,315,Base Recovery Coefficient Facemasks,-2476,1832,71,34,8,3,0,0,0,0,0,0
+10,316,Base Societal Stress Coefficient Facemasks,-2470,1904,105,23,8,3,0,0,0,0,0,0
+10,317,Base Effort Coefficient Facemasks,-2470,1967,54,34,8,3,0,0,0,0,0,0
+10,318,Time,-2478,1554,36,13,8,2,1,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,319,Time,-1920,2007,36,13,8,2,1,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,320,SWITCH Implement Facemasks,-2174,1577,54,34,8,3,0,0,0,0,0,0
+10,321,SWITCH End Facemasks,-2183,1652,62,23,8,3,0,0,0,0,0,0
+1,322,311,320,0,0,0,0,0,128,0,-1--1--1,,1|(-2325,1587)|
+1,323,313,320,0,0,0,0,0,128,0,-1--1--1,,1|(-2318,1613)|
+1,324,314,321,0,0,0,0,0,128,0,-1--1--1,,1|(-2342,1679)|
+1,325,313,321,0,0,0,0,0,128,0,-1--1--1,,1|(-2327,1652)|
+1,326,311,321,0,0,0,0,0,64,0,-1--1--1,,1|(-2333,1623)|
+10,327,Active Controller Facemasks,-1986,1623,76,23,8,3,0,0,0,0,0,0
+1,328,320,327,0,0,0,0,0,128,0,-1--1--1,,1|(-2097,1595)|
+1,329,321,327,0,0,0,0,0,128,0,-1--1--1,,1|(-2098,1639)|
+10,330,Transmission Coefficient Active Facemasks,-2015,1762,80,34,8,3,0,0,0,0,0,0
+10,331,Recovery Coefficient Active Facemasks,-1853,1813,96,23,8,3,0,0,0,0,0,0
+1,332,327,330,0,0,0,0,0,128,0,-1--1--1,,1|(-1997,1680)|
+1,333,327,331,0,0,0,0,0,128,0,-1--1--1,,1|(-1923,1712)|
+1,334,312,330,0,0,0,0,0,128,0,-1--1--1,,1|(-2239,1766)|
+1,335,315,331,0,0,0,0,0,128,0,-1--1--1,,1|(-2183,1822)|
+10,336,Societal Stress Coefficient Active Facemasks,-2006,1883,80,34,8,3,0,0,0,0,0,0
+10,337,Effort Coefficient Active Facemasks,-1876,1945,84,23,8,3,0,0,0,0,0,0
+1,338,316,336,0,0,0,0,0,128,0,-1--1--1,,1|(-2232,1893)|
+1,339,317,337,0,0,0,0,0,128,0,-1--1--1,,1|(-2194,1956)|
+1,340,327,336,0,0,0,0,0,128,0,-1--1--1,,1|(-1994,1740)|
+1,341,327,337,0,0,0,0,0,128,0,-1--1--1,,1|(-1933,1777)|
+10,342,SWITCH Start Social Distance I,-1331,218,78,23,8,3,0,0,0,0,0,0
+10,343,Base Transmission Coefficient Social Distance I,-1330,391,87,34,8,3,0,0,0,0,0,0
+10,344,Implementation Time Social Distance I,-1330,272,96,23,8,3,0,0,0,0,0,0
+10,345,Duration Social Distance I,-1336,323,70,23,8,3,0,0,0,0,0,0
+10,346,Base Recovery Coefficient Social Distance I,-1331,452,80,34,8,3,0,0,0,0,0,0
+10,347,Base Societal Stress Coefficient Social Distance I,-1325,524,97,34,8,3,0,0,0,0,0,0
+10,348,Base Effort Coefficient Social Distance I,-1325,587,80,34,8,3,0,0,0,0,0,0
+10,349,Time,-1333,174,36,13,8,2,1,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,350,Time,-775,627,36,13,8,2,1,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,351,SWITCH Implement Social Distance I,-1029,197,92,23,8,3,0,0,0,0,0,0
+10,352,SWITCH End Social Distance I,-1038,272,78,23,8,3,0,0,0,0,0,0
+1,353,342,351,0,0,0,0,0,128,0,-1--1--1,,1|(-1193,209)|
+1,354,344,351,0,0,0,0,0,128,0,-1--1--1,,1|(-1186,236)|
+1,355,345,352,0,0,0,0,0,128,0,-1--1--1,,1|(-1197,299)|
+1,356,344,352,0,0,0,0,0,128,0,-1--1--1,,1|(-1182,272)|
+1,357,342,352,0,0,0,0,0,64,0,-1--1--1,,1|(-1191,243)|
+10,358,Active Controller Social Distance I,-841,243,78,23,8,3,0,0,0,0,0,0
+1,359,351,358,0,0,0,0,0,128,0,-1--1--1,,1|(-934,220)|
+1,360,352,358,0,0,0,0,0,128,0,-1--1--1,,1|(-946,258)|
+10,361,Transmission Coefficient Active Social Distance I,-870,382,80,34,8,3,0,0,0,0,0,0
+10,362,Recovery Coefficient Active Social Distance I,-708,433,102,34,8,3,0,0,0,0,0,0
+1,363,358,361,0,0,0,0,0,128,0,-1--1--1,,1|(-852,300)|
+1,364,358,362,0,0,0,0,0,128,0,-1--1--1,,1|(-782,326)|
+1,365,343,361,0,0,0,0,0,128,0,-1--1--1,,1|(-1103,386)|
+1,366,346,362,0,0,0,0,0,128,0,-1--1--1,,1|(-1037,443)|
+10,367,Societal Stress Coefficient Active Social Distance I,-861,503,111,34,8,3,0,0,0,0,0,0
+10,368,Effort Coefficient Active Social Distance I,-731,565,78,34,8,3,0,0,0,0,0,0
+1,369,347,367,0,0,0,0,0,128,0,-1--1--1,,1|(-1106,514)|
+1,370,348,368,0,0,0,0,0,128,0,-1--1--1,,1|(-1033,576)|
+1,371,358,367,0,0,0,0,0,128,0,-1--1--1,,1|(-849,360)|
+1,372,358,368,0,0,0,0,0,128,0,-1--1--1,,1|(-790,391)|
+10,373,SWITCH Start Social Distance II,-1306,883,81,23,8,3,0,0,0,0,0,0
+10,374,Base Transmission Coefficient Social Distance II,-1305,1056,87,34,8,3,0,0,0,0,0,0
+10,375,Implementation Time Social Distance II,-1305,937,96,23,8,3,0,0,0,0,0,0
+10,376,Duration Social Distance II,-1311,988,70,23,8,3,0,0,0,0,0,0
+10,377,Base Recovery Coefficient Social Distance II,-1306,1117,80,34,8,3,0,0,0,0,0,0
+10,378,Base Societal Stress Coefficient Social Distance II,-1300,1189,97,34,8,3,0,0,0,0,0,0
+10,379,Base Effort Coefficient Social Distance II,-1300,1252,80,34,8,3,0,0,0,0,0,0
+10,380,Time,-1308,839,36,13,8,2,1,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,381,Time,-750,1292,36,13,8,2,1,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,382,SWITCH Implement Social Distance II,-1004,862,92,23,8,3,0,0,0,0,0,0
+10,383,SWITCH End Social Distance II,-1013,937,81,23,8,3,0,0,0,0,0,0
+1,384,373,382,0,0,0,0,0,128,0,-1--1--1,,1|(-1167,873)|
+1,385,375,382,0,0,0,0,0,128,0,-1--1--1,,1|(-1161,900)|
+1,386,376,383,0,0,0,0,0,128,0,-1--1--1,,1|(-1174,964)|
+1,387,375,383,0,0,0,0,0,128,0,-1--1--1,,1|(-1158,937)|
+1,388,373,383,0,0,0,0,0,64,0,-1--1--1,,1|(-1166,908)|
+10,389,Active Controller Social Distance II,-816,908,81,23,8,3,0,0,0,0,0,0
+1,390,382,389,0,0,0,0,0,128,0,-1--1--1,,1|(-911,884)|
+1,391,383,389,0,0,0,0,0,128,0,-1--1--1,,1|(-921,923)|
+10,392,Transmission Coefficient Active Social Distance II,-845,1047,81,34,8,3,0,0,0,0,0,0
+10,393,Recovery Coefficient Active Social Distance II,-683,1098,102,34,8,3,0,0,0,0,0,0
+1,394,389,392,0,0,0,0,0,128,0,-1--1--1,,1|(-827,965)|
+1,395,389,393,0,0,0,0,0,128,0,-1--1--1,,1|(-757,991)|
+1,396,374,392,0,0,0,0,0,128,0,-1--1--1,,1|(-1078,1051)|
+1,397,377,393,0,0,0,0,0,128,0,-1--1--1,,1|(-1012,1108)|
+10,398,Societal Stress Coefficient Active Social Distance II,-836,1168,111,34,8,3,0,0,0,0,0,0
+10,399,Effort Coefficient Active Social Distance II,-706,1230,78,34,8,3,0,0,0,0,0,0
+1,400,378,398,0,0,0,0,0,128,0,-1--1--1,,1|(-1081,1179)|
+1,401,379,399,0,0,0,0,0,128,0,-1--1--1,,1|(-1008,1241)|
+1,402,389,398,0,0,0,0,0,128,0,-1--1--1,,1|(-824,1025)|
+1,403,389,399,0,0,0,0,0,128,0,-1--1--1,,1|(-765,1056)|
+10,404,SWITCH Start Social Distance III,-1276,1603,84,23,8,3,0,0,0,0,0,0
+10,405,Base Transmission Coefficient Social Distance III,-1275,1776,87,34,8,3,0,0,0,0,0,0
+10,406,Implementation Time Social Distance III,-1275,1657,96,23,8,3,0,0,0,0,0,0
+10,407,Duration Social Distance III,-1281,1708,70,23,8,3,0,0,0,0,0,0
+10,408,Base Recovery Coefficient Social Distance III,-1276,1837,80,34,8,3,0,0,0,0,0,0
+10,409,Base Societal Stress Coefficient Social Distance III,-1270,1909,97,34,8,3,0,0,0,0,0,0
+10,410,Base Effort Coefficient Social Distance III,-1270,1972,80,34,8,3,0,0,0,0,0,0
+10,411,Time,-1278,1559,36,13,8,2,1,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,412,Time,-720,2012,36,13,8,2,1,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,413,SWITCH Implement Social Distance III,-974,1582,92,23,8,3,0,0,0,0,0,0
+10,414,SWITCH End Social Distance III,-983,1657,84,23,8,3,0,0,0,0,0,0
+1,415,404,413,0,0,0,0,0,128,0,-1--1--1,,1|(-1135,1593)|
+1,416,406,413,0,0,0,0,0,128,0,-1--1--1,,1|(-1131,1620)|
+1,417,407,414,0,0,0,0,0,128,0,-1--1--1,,1|(-1145,1685)|
+1,418,406,414,0,0,0,0,0,128,0,-1--1--1,,1|(-1130,1657)|
+1,419,404,414,0,0,0,0,0,64,0,-1--1--1,,1|(-1136,1628)|
+10,420,Active Controller Social Distance III,-786,1628,84,23,8,3,0,0,0,0,0,0
+1,421,413,420,0,0,0,0,0,128,0,-1--1--1,,1|(-882,1603)|
+1,422,414,420,0,0,0,0,0,128,0,-1--1--1,,1|(-891,1643)|
+10,423,Transmission Coefficient Active Social Distance III,-815,1767,84,34,8,3,0,0,0,0,0,0
+10,424,Recovery Coefficient Active Social Distance III,-653,1818,102,34,8,3,0,0,0,0,0,0
+1,425,420,423,0,0,0,0,0,128,0,-1--1--1,,1|(-797,1685)|
+1,426,420,424,0,0,0,0,0,128,0,-1--1--1,,1|(-727,1711)|
+1,427,405,423,0,0,0,0,0,128,0,-1--1--1,,1|(-1050,1771)|
+1,428,408,424,0,0,0,0,0,128,0,-1--1--1,,1|(-982,1828)|
+10,429,Societal Stress Coefficient Active Social Distance III,-806,1888,111,34,8,3,0,0,0,0,0,0
+10,430,Effort Coefficient Active Social Distance III,-676,1950,78,34,8,3,0,0,0,0,0,0
+1,431,409,429,0,0,0,0,0,128,0,-1--1--1,,1|(-1051,1899)|
+1,432,410,430,0,0,0,0,0,128,0,-1--1--1,,1|(-978,1961)|
+1,433,420,429,0,0,0,0,0,128,0,-1--1--1,,1|(-794,1745)|
+1,434,420,430,0,0,0,0,0,128,0,-1--1--1,,1|(-735,1776)|
+10,435,Immune Population,1129,403,58,35,3,131,0,0,0,0,0,0
+1,436,438,435,4,0,0,22,0,0,0,-1--1--1,,1|(1141,303)|
+1,437,438,1,100,0,0,22,0,0,0,-1--1--1,,1|(1141,141)|
+11,438,588,1141,230,6,8,34,3,0,0,1,0,0,0
+10,439,Immunized Susceptible,1141,261,54,23,40,3,0,0,-1,0,0,0
+10,440,Involuntary vaccination rate,1560,772,57,32,8,131,0,0,0,0,0,0
+1,441,23,2,0,0,0,0,0,64,1,-1--1--1,,1|(1166,10)|
+1,442,435,30,1,0,0,0,0,64,0,-1--1--1,,1|(1417,185)|
+12,443,0,-1967,-2014,191,87,8,135,0,8,-1,0,0,0,-1--1--1,0-0-0,|36||0-0-0
+Templates
+10,444,Transmission Coefficient Active Case Isolation,761,-710,107,34,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,445,Transmission Coefficient Active Facemasks,692,-616,80,34,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,446,Transmission Coefficient Active Medical Care I,867,-615,80,34,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,447,Transmission Coefficient Active Medical Care II,846,-522,80,34,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,448,Transmission Coefficient Active Public Edu,885,-419,80,34,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,449,Transmission Coefficient Active Public Info,978,-355,80,34,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,450,Transmission Coefficient Active Tracing,1022,-653,80,34,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,451,Transmission Coefficient Active Social Distance I,1167,-716,111,34,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,452,Transmission Coefficient Active Social Distance II,948,-764,111,34,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,453,Transmission Coefficient Active Social Distance III,1243,-650,111,34,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,454,453,57,0,0,0,0,0,128,0,-1--1--1,,1|(1179,-597)|
+1,455,451,57,0,0,0,0,0,128,0,-1--1--1,,1|(1143,-632)|
+1,456,450,57,0,0,0,0,0,128,0,-1--1--1,,1|(1070,-599)|
+1,457,452,57,0,0,0,0,0,128,0,-1--1--1,,1|(1032,-655)|
+1,458,446,57,0,0,0,0,0,128,0,-1--1--1,,1|(999,-579)|
+1,459,447,57,0,0,0,0,0,128,0,-1--1--1,,1|(988,-534)|
+1,460,448,57,0,0,0,0,0,128,0,-1--1--1,,1|(1005,-485)|
+1,461,449,57,0,0,0,0,0,128,0,-1--1--1,,1|(1047,-450)|
+1,462,445,57,0,0,0,0,0,128,0,-1--1--1,,1|(911,-580)|
+1,463,444,57,0,0,0,0,0,128,0,-1--1--1,,1|(945,-625)|
+10,464,Recovery Coefficient Active Case Isolation,1767,-777,103,23,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,465,Recovery Coefficient Active Facemasks,1722,-693,80,34,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,466,Recovery Coefficient Active Medical Care I,1899,-853,105,23,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,467,Recovery Coefficient Active Medical Care II,2159,-836,108,23,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,468,Recovery Coefficient Active Public Edu,1727,-602,80,34,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,469,Recovery Coefficient Active Public Info,2005,-754,80,34,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,470,Recovery Coefficient Active Tracing,2218,-720,80,34,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,471,Recovery Coefficient Active Social Distance I,2205,-605,102,34,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,472,Recovery Coefficient Active Social Distance II,2205,-505,102,34,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,473,Recovery Coefficient Active Social Distance III,2167,-389,102,34,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,474,468,59,0,0,0,0,0,128,0,-1--1--1,,1|(1841,-574)|
+1,475,465,59,0,0,0,0,0,128,0,-1--1--1,,1|(1839,-618)|
+1,476,464,59,0,0,0,0,0,128,0,-1--1--1,,1|(1855,-667)|
+1,477,469,59,0,0,0,0,0,128,0,-1--1--1,,1|(1979,-651)|
+1,478,467,59,0,0,0,0,0,128,0,-1--1--1,,1|(2060,-697)|
+1,479,466,59,0,0,0,0,0,128,0,-1--1--1,,1|(1924,-706)|
+1,480,470,59,0,0,0,0,0,128,0,-1--1--1,,1|(2082,-631)|
+1,481,471,59,0,0,0,0,0,128,0,-1--1--1,,1|(2066,-573)|
+1,482,472,59,0,0,0,0,0,128,0,-1--1--1,,1|(2066,-527)|
+1,483,473,59,0,0,0,0,0,128,0,-1--1--1,,1|(2058,-469)|
+10,484,Current Total Effort,1111,-1112,61,23,8,3,0,0,0,0,0,0
+10,485,Effort Coefficient Active,846,-1286,86,23,8,2,1,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,486,Effort Coefficient Active Facemasks,806,-1164,91,23,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,487,Effort Coefficient Active Medical Care I,785,-1073,105,23,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,488,Effort Coefficient Active Medical Care II,778,-976,93,34,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,489,Effort Coefficient Active Public Edu,1114,-1284,86,23,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,490,Effort Coefficient Active Public Info,1357,-1264,85,23,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,491,Effort Coefficient Active Social Distance I,1399,-1152,102,34,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,492,Effort Coefficient Active Social Distance II,1373,-1046,102,34,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,493,Effort Coefficient Active Social Distance III,1303,-918,102,34,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,494,Effort Coefficient Active Tracing,1026,-939,84,23,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,495,489,484,0,0,0,0,0,128,0,-1--1--1,,1|(1112,-1205)|
+1,496,486,484,0,0,0,0,0,128,0,-1--1--1,,1|(966,-1136)|
+1,497,487,484,0,0,0,0,0,128,0,-1--1--1,,1|(962,-1093)|
+1,498,488,484,0,0,0,0,0,128,0,-1--1--1,,1|(951,-1046)|
+1,499,494,484,0,0,0,0,0,128,0,-1--1--1,,1|(1064,-1018)|
+1,500,493,484,0,0,0,0,0,128,0,-1--1--1,,1|(1206,-1015)|
+1,501,492,484,0,0,0,0,0,128,0,-1--1--1,,1|(1228,-1081)|
+1,502,491,484,0,0,0,0,0,128,0,-1--1--1,,1|(1241,-1129)|
+1,503,490,484,0,0,0,0,0,128,0,-1--1--1,,1|(1239,-1191)|
+10,504,Current Societal Stress,2089,-1384,74,23,8,3,0,0,0,0,0,0
+10,505,Societal Stress Coefficient Active Case Isolation,1729,-1601,107,34,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,506,Societal Stress Coefficient Active Facemasks,1689,-1441,80,34,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,507,505,504,0,0,0,0,0,128,0,-1--1--1,,1|(1911,-1490)|
+1,508,506,504,0,0,0,0,0,128,0,-1--1--1,,1|(1885,-1413)|
+1,509,22,1,0,0,0,0,0,64,1,-1--1--1,,1|(1006,-29)|
+10,510,Effort Coefficient Active Case Isolation,794,-1308,103,23,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,511,510,484,0,0,0,0,0,128,0,-1--1--1,,1|(946,-1213)|
+10,512,Societal Stress Coefficient Active Medical Care I,1704,-1311,80,34,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,513,Societal Stress Coefficient Active Medical Care II,1734,-1200,80,34,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,514,Societal Stress Coefficient Active Public Edu,1789,-1091,80,34,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,515,Societal Stress Coefficient Active Public Info,1988,-1128,80,34,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,516,Societal Stress Coefficient Active Social Distance I,2254,-1191,111,34,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,517,Societal Stress Coefficient Active Social Distance II,2338,-1297,111,34,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,518,Societal Stress Coefficient Active Social Distance III,2381,-1408,111,34,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,519,Societal Stress Coefficient Active Tracing,2329,-1560,80,34,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,520,512,504,0,0,0,0,0,128,0,-1--1--1,,1|(1892,-1346)|
+1,521,513,504,0,0,0,0,0,128,0,-1--1--1,,1|(1915,-1294)|
+1,522,514,504,0,0,0,0,0,128,0,-1--1--1,,1|(1938,-1238)|
+1,523,515,504,0,0,0,0,0,128,0,-1--1--1,,1|(2037,-1254)|
+1,524,516,504,0,0,0,0,0,128,0,-1--1--1,,1|(2171,-1287)|
+1,525,517,504,0,0,0,0,0,128,0,-1--1--1,,1|(2204,-1343)|
+1,526,518,504,0,0,0,0,0,128,0,-1--1--1,,1|(2223,-1395)|
+1,527,519,504,0,0,0,0,0,128,0,-1--1--1,,1|(2207,-1470)|
+10,528,SWITCH Start Voluntary Immunization,534,933,67,34,8,3,0,0,0,0,0,0
+10,529,Implementation Time Voluntary Immunization,535,987,106,23,8,3,0,0,0,0,0,0
+10,530,Duration Voluntary Immunization,529,1038,85,23,8,3,0,0,0,0,0,0
+10,531,Base Societal Stress Coefficient Voluntary Immunization,513,1133,97,34,8,3,0,0,0,0,0,0
+10,532,Base Effort Coefficient Voluntary Immunization,513,1196,106,23,8,3,0,0,0,0,0,0
+10,533,Time,532,889,36,13,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,534,Time,1063,1236,36,13,8,2,1,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,535,SWITCH Implement Voluntary Immunization,836,912,106,23,8,3,0,0,0,0,0,0
+10,536,SWITCH End Voluntary Immunization,827,987,62,34,8,3,0,0,0,0,0,0
+1,537,528,535,0,0,0,0,0,128,0,-1--1--1,,1|(658,924)|
+1,538,529,535,0,0,0,0,0,128,0,-1--1--1,,1|(678,951)|
+1,539,530,536,0,0,0,0,0,128,0,-1--1--1,,1|(682,1011)|
+1,540,529,536,0,0,0,0,0,128,0,-1--1--1,,1|(696,987)|
+1,541,528,536,0,0,0,0,0,64,0,-1--1--1,,1|(676,958)|
+10,542,Active Controller Voluntary Immunization,1024,958,76,34,8,3,0,0,0,0,0,0
+1,543,535,542,0,0,0,0,0,128,0,-1--1--1,,1|(932,935)|
+1,544,536,542,0,0,0,0,0,128,0,-1--1--1,,1|(911,974)|
+10,545,Societal Stress Coefficient Active Voluntary Immunization,977,1112,106,34,8,3,0,0,0,0,0,0
+10,546,Effort Coefficient Active Voluntary Immunization,1107,1174,78,34,8,3,0,0,0,0,0,0
+1,547,531,545,0,0,0,0,0,128,0,-1--1--1,,1|(733,1122)|
+1,548,532,546,0,0,0,0,0,128,0,-1--1--1,,1|(817,1184)|
+1,549,542,545,0,0,0,0,0,128,0,-1--1--1,,1|(1002,1028)|
+1,550,542,546,0,0,0,0,0,128,0,-1--1--1,,1|(1062,1059)|
+10,551,SWITCH Start Involuntary Immunization,1734,933,67,34,8,3,0,0,0,0,0,0
+10,552,Implementation Time Involuntary Immunization,1735,987,96,34,8,3,0,0,0,0,0,0
+10,553,Duration Involuntary Immunization,1729,1038,60,34,8,3,0,0,0,0,0,0
+10,554,Base Societal Stress Coefficient Involuntary Immunization,1744,1139,102,34,8,3,0,0,0,0,0,0
+10,555,Base Effort Coefficient Involuntary Immunization,1744,1202,112,23,8,3,0,0,0,0,0,0
+10,556,Time,1732,889,36,13,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,557,Time,2294,1242,36,13,8,2,1,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,558,SWITCH Implement Involuntary Immunization,2036,912,92,34,8,3,0,0,0,0,0,0
+10,559,SWITCH End Involuntary Immunization,2027,987,62,34,8,3,0,0,0,0,0,0
+1,560,551,558,0,0,0,0,0,128,0,-1--1--1,,1|(1865,924)|
+1,561,552,558,0,0,0,0,0,128,0,-1--1--1,,1|(1880,950)|
+1,562,553,559,0,0,0,0,0,128,0,-1--1--1,,1|(1869,1013)|
+1,563,552,559,0,0,0,0,0,128,0,-1--1--1,,1|(1891,987)|
+1,564,551,559,0,0,0,0,0,64,0,-1--1--1,,1|(1876,958)|
+10,565,Active Controller Involuntary Immunization,2224,958,76,34,8,3,0,0,0,0,0,0
+1,566,558,565,0,0,0,0,0,128,0,-1--1--1,,1|(2131,934)|
+1,567,559,565,0,0,0,0,0,128,0,-1--1--1,,1|(2111,974)|
+10,568,Societal Stress Coefficient Active Involuntary Immunization,2208,1118,112,34,8,3,0,0,0,0,0,0
+10,569,Effort Coefficient Active Involuntary Immunization,2338,1180,81,34,8,3,0,0,0,0,0,0
+1,570,554,568,0,0,0,0,0,128,0,-1--1--1,,1|(1964,1129)|
+1,571,555,569,0,0,0,0,0,128,0,-1--1--1,,1|(2049,1190)|
+1,572,565,568,0,0,0,0,0,128,0,-1--1--1,,1|(2216,1031)|
+1,573,565,569,0,0,0,0,0,128,0,-1--1--1,,1|(2277,1062)|
+10,574,Voluntary vaccination rate,1123,785,72,23,8,3,0,0,0,0,0,0
+1,575,542,574,0,0,0,0,0,128,0,-1--1--1,,1|(1072,872)|
+1,576,565,440,0,0,0,0,0,128,0,-1--1--1,,1|(1889,863)|
+10,577,Vaccination rate,1296,584,53,23,8,3,0,0,-1,0,0,0
+1,578,577,439,1,0,0,0,0,64,0,-1--1--1,,1|(1278,412)|
+10,579,SWITCH Voluntary or Involuntary vaccination,922,675,103,23,8,3,0,0,0,0,0,0
+10,580,Effort Coefficient Active Involuntary Immunization,1258,-1386,84,34,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,581,Effort Coefficient Active Voluntary Immunization,998,-1384,84,34,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,582,581,484,0,0,0,0,0,128,0,-1--1--1,,1|(1053,-1248)|
+1,583,580,484,0,0,0,0,0,128,0,-1--1--1,,1|(1184,-1249)|
+10,584,Societal Stress Coefficient Active Involuntary Immunization,1967,-1673,118,34,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+10,585,Societal Stress Coefficient Active Voluntary Immunization,2192,-1700,112,34,8,2,0,3,-1,0,0,0,128-128-128,0-0-0,|12||128-128-128
+1,586,584,504,0,0,0,0,0,128,0,-1--1--1,,1|(2027,-1529)|
+1,587,585,504,0,0,0,0,0,128,0,-1--1--1,,1|(2140,-1543)|
+10,588,Stock Total Effort,1237,-1641,50,42,3,131,0,0,0,0,0,0
+10,589,Stock Societal Stress,2064,-1858,63,42,3,131,0,0,0,0,0,0
+12,590,48,983,-1658,10,8,0,3,0,0,-1,0,0,0
+1,591,593,588,4,0,0,22,0,0,0,-1--1--1,,1|(1141,-1658)|
+1,592,593,590,100,0,0,22,0,0,0,-1--1--1,,1|(1038,-1658)|
+11,593,48,1090,-1658,6,8,34,3,0,0,1,0,0,0
+10,594,Current Effort Inflow,1090,-1627,64,23,40,3,0,0,-1,0,0,0
+12,595,48,1658,-1878,10,8,0,3,0,0,-1,0,0,0
+1,596,598,589,4,0,0,22,0,0,0,-1--1--1,,1|(1920,-1878)|
+1,597,598,595,100,0,0,22,0,0,0,-1--1--1,,1|(1748,-1878)|
+11,598,48,1834,-1878,6,8,34,3,0,0,1,0,0,0
+10,599,Current Societal Stress Inflow,1834,-1847,74,23,40,3,0,0,-1,0,0,0
+1,600,484,594,1,0,0,0,0,128,0,-1--1--1,,1|(1170,-1455)|
+1,601,504,599,1,0,0,0,0,128,0,-1--1--1,,1|(2107,-1624)|
+10,602,SWITCH Vaccination,963,547,53,23,8,3,0,0,0,0,0,0
+10,603,Nominal Vaccination Rate,1341,779,78,23,8,3,0,0,0,0,0,0
+1,604,574,603,0,0,0,0,0,128,0,-1--1--1,,1|(1222,782)|
+1,605,440,603,0,0,0,0,0,128,0,-1--1--1,,1|(1467,774)|
+1,606,579,603,0,0,0,0,0,128,0,-1--1--1,,1|(1131,726)|
+1,607,603,577,0,0,0,0,0,128,0,-1--1--1,,1|(1320,688)|
+1,608,602,577,0,0,0,0,0,128,0,-1--1--1,,1|(1122,564)|
+10,609,Lever Public Info,-1685,-1134,57,23,8,3,0,0,0,0,0,0
+1,610,609,156,0,0,0,0,0,128,0,-1--1--1,,1|(-1579,-1128)|
+10,611,Lever Public Edu,-2733,-1151,57,23,8,3,0,0,0,0,0,0
+10,612,Lever Case Isolation,-2741,-511,54,23,8,3,0,0,0,0,0,0
+10,613,Lever Tracing,-1628,-498,64,11,8,3,0,0,0,0,0,0
+10,614,Lever Medical Care I,-2704,150,65,23,8,3,0,0,0,0,0,0
+10,615,Lever Social Distance I,-1553,182,57,23,8,3,0,0,0,0,0,0
+10,616,Lever Medical Care II,-2694,829,65,23,8,3,0,0,0,0,0,0
+10,617,Lever Social Distance II,-1564,826,57,23,8,3,0,0,0,0,0,0
+10,618,Lever Facemasks,-2722,1491,54,23,8,3,0,0,0,0,0,0
+10,619,Lever Social Distance III,-1504,1510,57,23,8,3,0,0,0,0,0,0
+1,620,611,125,0,0,0,0,0,128,0,-1--1--1,,1|(-2656,-1136)|
+1,621,612,187,0,0,0,0,0,128,0,-1--1--1,,1|(-2661,-492)|
+1,622,613,218,0,0,0,0,0,128,0,-1--1--1,,1|(-1527,-479)|
+1,623,615,342,0,0,0,0,0,128,0,-1--1--1,,1|(-1459,198)|
+1,624,617,373,0,0,0,0,0,128,0,-1--1--1,,1|(-1453,849)|
+1,625,616,280,0,0,0,0,0,128,0,-1--1--1,,1|(-2592,860)|
+1,626,614,249,0,0,0,0,0,128,0,-1--1--1,,1|(-2610,175)|
+1,627,618,311,0,0,0,0,0,128,0,-1--1--1,,1|(-2605,1541)|
+1,628,619,404,0,0,0,0,0,128,0,-1--1--1,,1|(-1396,1553)|
+10,629,Lever Vaccination,604,541,53,23,8,3,0,0,0,0,0,0
+10,630,Lever Voluntary or Involuntary Vaccination,518,678,105,23,8,3,0,0,0,0,0,0
+1,631,629,602,0,0,0,0,0,128,0,-1--1--1,,1|(776,543)|
+1,632,630,579,0,0,0,0,0,128,0,-1--1--1,,1|(714,676)|
+///---\\\
+:L<%^E!@
+1:baseAllActive.vdf
+9:baseAllActive
+22:$,Dollar,Dollars,$s
+22:Hour,Hours
+22:Month,Months
+22:Person,People,Persons
+22:Unit,Units
+22:Week,Weeks
+22:Year,Years
+22:Day,Days
+15:0,0,0,1,0,0
+19:80,0
+27:2,
+34:0,
+4:Time
+5:SWITCH Voluntary or Involuntary vaccination
+35:Date
+36:YYYY-MM-DD
+37:2000
+38:1
+39:1
+40:4
+41:0
+42:0
+24:0
+25:360
+26:360
